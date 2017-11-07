@@ -11,12 +11,16 @@ class ReadingsController < ApplicationController
   end
 
   def create
-    @reading = Reading.new(reading_params)
-    if @reading.save
-      render :json => @reading
-    else
+    apiKey = request.headers["apiKey"]
+    puts "value of api key #{apiKey}"
+
+    if Secretkey.where(key: apiKey).empty?
       @error = 'Error saving reading'
-      render :json => @error, status: 400
+      render :json => @error, status: 401
+    else
+      @reading = Reading.new(reading_params)
+      @reading.save
+      render :json => @reading
     end
   end
 
