@@ -1,0 +1,2 @@
+class Secretkey < ApplicationRecord
+end
