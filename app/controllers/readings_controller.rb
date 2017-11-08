@@ -11,9 +11,6 @@ class ReadingsController < ApplicationController
   end
 
   def create
-    # apiKey = request.headers["apiKey"]
-    # puts "value of api key #{apiKey}"
-
     #TODO: move this to the ApplicationController
     #TODO: secure all the other api methods
 
@@ -25,37 +22,18 @@ class ReadingsController < ApplicationController
       render :json => {error: 'Unauthorized'}, status: 401
     end
 
-
-    # if Secretkey.where(key: apiKey).empty?
-    #   @error = 'Error saving reading'
-    #   render :json => @error, status: 401
-    # else
-    #   @reading = Reading.new(reading_params)
-    #   @reading.save
-    #   render :json => @reading
-    # end
   end
 
   def update
-    # Need to allow this method only for admin, add another field to get the name of person that edited
-    apiKey = request.headers["apiKey"]
-    if Secretkey.where(key: apiKey).empty?
-      @error = 'Error updating the reading'
-      render :json => @error.to_json, status: 400
-    else
+
+    if request_is_authorized == true
       @reading = Reading.find_by(id: params[:id])
       @reading.update(reading_params)
-      render :json => @reading.to_json
+      render :json => @reading
+    else
+      render :json => {error: 'Unauthorized'}, status: 401
     end
-
-
-    # @reading = Reading.find_by(id: params[:id])
-    # if @reading.update(reading_params)
-    #   render :json => @reading
-    # else
-    #   @error = 'Error updating the reading'
-    #   render :json => @error, status: 400
-    # end
+    
   end
 
   def delete
