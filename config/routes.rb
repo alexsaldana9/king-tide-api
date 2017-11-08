@@ -5,13 +5,6 @@ Rails.application.routes.draw do
 
   get 'status/get', to: 'status#get_status'
 
-  get 'users/all', to: 'users#getall'
-  get 'users/:id', to: 'users#get'
-  post 'users/', to: 'users#create'
-  put  'users/', to: 'users#update'
-  delete 'users/', to: 'users#delete'
-
-
   get 'readings/all', to: 'readings#getall'
   get 'readings/:id', to: 'readings#get'
   post 'readings/', to: 'readings#create'
