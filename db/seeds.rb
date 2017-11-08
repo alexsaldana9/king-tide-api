@@ -7,9 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-u1 = User.create(firstName: 'Alex', lastName: 'Salda')
-u3 = User.create(firstName: 'Maria', lastName: 'Rod')
-
 r1 = Reading.create(depth: 2.0, units_depth: 'inches', salinity: 100, units_salinity: 'ppt', description: 'Flood at Vizcaya' )
 r2 = Reading.create(depth: 4.0, units_depth: 'inches', salinity: 50, units_salinity: 'ppt', description: 'Flood at Brickell' )
 
