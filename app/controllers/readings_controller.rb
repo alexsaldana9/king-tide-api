@@ -11,8 +11,6 @@ class ReadingsController < ApplicationController
   end
 
   def create
-    #TODO: move this to the ApplicationController
-    #TODO: remove the users controller/model/etc
 
     if request_is_not_authorized
       return unauthorized_request
@@ -24,6 +22,9 @@ class ReadingsController < ApplicationController
   end
 
   def update
+    # Need to allow this method only for admin, add another field to get the name of person that deleted
+    #Or maybe this method is not necessary, this can complicate the data management
+
     if request_is_not_authorized
       return unauthorized_request
     end
