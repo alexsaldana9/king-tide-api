@@ -14,4 +14,8 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def unauthorized_request
+    return render :json => {error: 'Unauthorized'}, status: 401
+  end
+
 end

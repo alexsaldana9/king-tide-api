@@ -13,13 +13,14 @@ class ReadingsController < ApplicationController
   def create
     #TODO: move this to the ApplicationController
     #TODO: secure all the other api methods
+    #TODO: remove the users controller/model/etc
 
     if request_is_authorized == true
       reading = Reading.new(reading_params)
       reading.save
       render :json => reading
     else
-      render :json => {error: 'Unauthorized'}, status: 401
+      unauthorized_request
     end
 
   end
@@ -31,7 +32,7 @@ class ReadingsController < ApplicationController
       reading.update(reading_params)
       render :json => reading
     else
-      render :json => {error: 'Unauthorized'}, status: 401
+      unauthorized_request
     end
 
   end
@@ -45,32 +46,8 @@ class ReadingsController < ApplicationController
       reading.destroy
       render :json => {status: 'Record deleted'}
     else
-      render :json => {error: 'Unauthorized'}, status: 401
+      unauthorized_request
     end
-
-
-
-    # apiKey = request.headers["apiKey"]
-    # if Secretkey.where(key: apiKey).empty?
-    #   @error = 'Error deleting the reading'
-    #   render :json => @error.to_json
-    # else
-    #   @reading = Reading.find_by(id: params[:id])
-    #   @reading.destroy
-    #   @message = 'Record deleted'
-    #   render :json => @message.to_json
-    # end
-
-
-    # if @reading = Reading.find_by(id: params[:id])
-    #   @reading.delete
-    #   @message = 'Record deleted'
-    #   render :json => @message
-    # else
-    #   @error = 'Error deleting the reading'
-    #   render :json => @error
-    # end
-
 
   end
 
