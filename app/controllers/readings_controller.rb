@@ -16,6 +16,10 @@ class ReadingsController < ApplicationController
       return unauthorized_request
     end
 
+    if is_invalid_float_param(:depth)
+      return input_error
+    end
+
     reading = Reading.new(reading_params)
     reading.save
     render :json => reading
@@ -41,6 +45,10 @@ class ReadingsController < ApplicationController
     if request_is_not_authorized
       return unauthorized_request
     end
+
+    # puts "DEBUG-START"
+    # puts "#{params}"
+    # puts "DEBUG-END"
 
     reading = Reading.find_by(id: params[:id])
     reading.destroy
