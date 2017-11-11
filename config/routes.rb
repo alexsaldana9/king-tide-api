@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   get 'readings/all', to: 'readings#getall'
   get 'readings/:id', to: 'readings#get'
   post 'readings/', to: 'readings#create'
-  put 'readings/', to: 'readings#update'
   delete 'readings/', to: 'readings#delete'
 
 end
