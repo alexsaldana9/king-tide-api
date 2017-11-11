@@ -8,8 +8,8 @@ describe ReadingsController , :type => :api do
   context 'Get all readings'
   before do
     # header "Authorization", "apiKey #{llave2}"
-    r1 = Reading.create(depth: 2.0, units_depth: 'inches', salinity: 100, units_salinity: 'ppt', description: 'Flood at Vizcaya' )
-    @r2 = Reading.create(depth: 4.0, units_depth: 'inches', salinity: 50, units_salinity: 'ppt', description: 'Flood at Brickell' )
+    r1 = Reading.create(depth: 2.0, units_depth: 'inches', salinity: 100, units_salinity: 'ppt', description: 'Flood at Vizcaya', approved: false, deleted: false)
+    @r2 = Reading.create(depth: 4.0, units_depth: 'inches', salinity: 50, units_salinity: 'ppt', description: 'Flood at Brickell', approved: false, deleted: false)
     key = Secretkey.create(name: 'sample', key: 'keysample')
   end
 
@@ -128,7 +128,7 @@ describe ReadingsController , :type => :api do
       delete "readings/", { id: @r2.id }
 
       expect(last_response.status).to eq(200)
-      expect(Reading.count).to eq(1)
+      expect(Reading.all.map(&:deleted)).to eq([false, true])
     end
 
     it 'Does not delete, when apiKey is invalid' do
@@ -136,14 +136,14 @@ describe ReadingsController , :type => :api do
       delete "readings/", { id: @r2.id }
 
       expect(last_response.status).to eq(401)
-      expect(Reading.count).to eq(2)
+      expect(Reading.all.map(&:deleted)).to eq([false, false])
     end
 
     it 'Does not delete, when apiKey is not passed' do
       delete "readings/", { id: @r2.id }
 
       expect(last_response.status).to eq(401)
-      expect(Reading.count).to eq(2)
+      expect(Reading.all.map(&:deleted)).to eq([false, false])
     end
 
   end
