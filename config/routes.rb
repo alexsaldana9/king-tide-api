@@ -5,7 +5,8 @@ Rails.application.routes.draw do
 
   get 'status/get', to: 'status#get_status'
 
-  get 'readings/all', to: 'readings#getall'
+  get 'readings/all', to: 'readings#get_all'
+  get 'readings/approved', to: 'readings#get_all_approved'
   get 'readings/:id', to: 'readings#get'
   post 'readings/', to: 'readings#create'
   delete 'readings/', to: 'readings#delete'

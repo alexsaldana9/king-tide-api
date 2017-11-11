@@ -1,7 +1,13 @@
 class ReadingsController < ApplicationController
 
-  def getall
+  def get_all
     readings = Reading.all.each
+    render :json => readings
+  end
+
+  def get_all_approved
+    readings = Reading.where(deleted: false)
+                   .where(approved: true)
     render :json => readings
   end
 

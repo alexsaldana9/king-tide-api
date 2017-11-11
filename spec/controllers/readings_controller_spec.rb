@@ -8,7 +8,7 @@ describe ReadingsController , :type => :api do
   context 'Get all readings'
   before do
     # header "Authorization", "apiKey #{llave2}"
-    r1 = Reading.create(depth: 2.0, units_depth: 'inches', salinity: 100, units_salinity: 'ppt', description: 'Flood at Vizcaya', approved: false, deleted: false)
+    @r1 = Reading.create(depth: 2.0, units_depth: 'inches', salinity: 100, units_salinity: 'ppt', description: 'Flood at Vizcaya', approved: false, deleted: false)
     @r2 = Reading.create(depth: 4.0, units_depth: 'inches', salinity: 50, units_salinity: 'ppt', description: 'Flood at Brickell', approved: false, deleted: false)
     key = Secretkey.create(name: 'sample', key: 'keysample')
   end
@@ -20,6 +20,33 @@ describe ReadingsController , :type => :api do
 
     readings = Reading.all.each.to_json
     expect(json.each.to_json).to eq(readings)
+  end
+
+  describe 'Approved Readings' do
+    it 'responds with approved readings' do
+      @r1.approved = true
+      @r1.save
+
+      get "readings/approved"
+
+      expect(last_response.status).to eq(200)
+      expect(json.each.to_json).to eq([@r1].each.to_json)
+    end
+
+    it 'responds with non-deleted readings' do
+      @r1.approved = true
+      @r2.deleted = false
+      @r1.save
+
+      @r2.approved = true
+      @r2.deleted = true
+      @r2.save
+
+      get "readings/approved"
+
+      expect(last_response.status).to eq(200)
+      expect(json.each.to_json).to eq([@r1].each.to_json)
+    end
   end
 
   describe 'Create reading' do
