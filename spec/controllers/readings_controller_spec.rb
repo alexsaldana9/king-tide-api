@@ -109,8 +109,6 @@ describe ReadingsController , :type => :api do
       expect(last_response.status).to eq(400)
       expect(Reading.count).to eq(2)
     end
-
-
   end
 
 
@@ -121,6 +119,21 @@ describe ReadingsController , :type => :api do
 
       expect(last_response.status).to eq(200)
       expect(Reading.count).to eq(1)
+    end
+
+    it 'Does not delete, when apiKey is invalid' do
+      header 'apiKey', 'invalidKey'
+      delete "readings/", { id: @r2.id }
+
+      expect(last_response.status).to eq(401)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'Does not delete, when apiKey is not passed' do
+      delete "readings/", { id: @r2.id }
+
+      expect(last_response.status).to eq(401)
+      expect(Reading.count).to eq(2)
     end
 
   end
