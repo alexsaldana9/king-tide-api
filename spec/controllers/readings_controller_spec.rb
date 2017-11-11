@@ -61,6 +61,23 @@ describe ReadingsController , :type => :api do
       expect(last_response.status).to eq(400)
       expect(Reading.count).to eq(2)
     end
+
+    it 'Invalid units_depth parameter fails' do
+      header 'apiKey', 'keysample'
+      post "readings/", {depth: 2.23, units_depth: "", salinity: 30, units_salinity: 'ppm', description: 'sample description' }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'Missing units_depth parameter fails' do
+      header 'apiKey', 'keysample'
+      post "readings/", {depth: 2.23, salinity: 30, units_salinity: 'ppm', description: 'sample description' }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
   end
 
   describe 'Update reading' do

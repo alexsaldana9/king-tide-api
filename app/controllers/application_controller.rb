@@ -1,4 +1,13 @@
 class ApplicationController < ActionController::API
+  def unauthorized_request
+    return render :json => {error: 'Unauthorized'}, status: 401
+  end
+
+  def input_error(param_name="N/A")
+    p "input_error; param_name=#{param_name}"
+    return render :json => {error: 'Input error'}, status: 400
+  end
+
 
   def request_is_not_authorized
     # return request_is_authorized == false
@@ -23,14 +32,6 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def unauthorized_request
-    return render :json => {error: 'Unauthorized'}, status: 401
-  end
-
-  def input_error
-    return render :json => {error: 'Input error'}, status: 400
-  end
-
   def is_invalid_float_param(param_name)
     # return is_valid_float_param(param_name) == false
     not is_valid_float_param(param_name)
@@ -46,5 +47,16 @@ class ApplicationController < ActionController::API
     rescue
       return false
     end
+  end
+
+  def is_invalid_string_param(param_name)
+    not is_valid_string_param(param_name)
+  end
+
+  def is_valid_string_param(param_name)
+    if params[param_name] == nil
+      return false
+    end
+    params[param_name].empty? == false
   end
 end

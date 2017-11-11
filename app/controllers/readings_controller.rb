@@ -17,7 +17,11 @@ class ReadingsController < ApplicationController
     end
 
     if is_invalid_float_param(:depth)
-      return input_error
+      return input_error(:depth)
+    end
+
+    if is_invalid_string_param(:units_depth)
+      return input_error(:units_depth)
     end
 
     reading = Reading.new(reading_params)
