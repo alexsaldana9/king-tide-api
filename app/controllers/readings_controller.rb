@@ -11,6 +11,7 @@ class ReadingsController < ApplicationController
   end
 
   def create
+    p "create; params=#{params}"
 
     if request_is_not_authorized
       return unauthorized_request
@@ -28,8 +29,10 @@ class ReadingsController < ApplicationController
       return input_error(:units_depth)
     end
 
-    reading = Reading.new(reading_params)
-    reading.save
+    reading = Reading.create(reading_params)
+
+    p "create; result=success; reading_id=#{reading.id}"
+
     render :json => reading
   end
 
