@@ -29,6 +29,16 @@ describe ReadingsController , :type => :api do
 
       expect(last_response.status).to eq(200)
       expect(Reading.count).to eq(3)
+
+      created_reading = Reading.last
+      expect(created_reading.depth).to eq(3)
+      expect(created_reading.units_depth).to eq('feet')
+      expect(created_reading.salinity).to eq(30)
+      expect(created_reading.units_salinity).to eq('ppm')
+      expect(created_reading.description).to eq('sample description')
+      expect(created_reading.approved).to eq(false)
+      expect(created_reading.deleted).to eq(false)
+
     end
 
     it 'Can create reading with no salinity' do

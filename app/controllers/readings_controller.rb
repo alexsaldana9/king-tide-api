@@ -33,8 +33,10 @@ class ReadingsController < ApplicationController
       return input_error(:units_depth)
     end
 
-
-    reading = Reading.create(reading_params)
+    full_params = reading_params
+    full_params[:approved] = false
+    full_params[:deleted] = false
+    reading = Reading.create(full_params)
 
     p "create; result=success; reading_id=#{reading.id}"
 
@@ -59,6 +61,8 @@ class ReadingsController < ApplicationController
     render :json => {status: 'Record deleted'}
 
   end
+
+  private
 
   def reading_params
     params.permit(:depth, :units_depth, :salinity, :units_salinity, :description)
