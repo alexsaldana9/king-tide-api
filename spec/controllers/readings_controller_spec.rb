@@ -88,24 +88,31 @@ describe ReadingsController , :type => :api do
 
     it 'Invalid salinity will fail' do
       header 'apiKey', 'keysample'
-      post "readings/", { depth: 3, units_depth: 'feet', salinity: 'gross', units_salinity: 'ppm', description: 'sample description' }
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 'text', units_salinity: 'ppm', description: 'sample description' }
 
       expect(last_response.status).to eq(400)
       expect(Reading.count).to eq(2)
     end
-  end
 
-  describe 'Update reading' do
-    xit 'Update r2' do
+    it 'Invalid salinity will fail' do
       header 'apiKey', 'keysample'
-      r2 = { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'Update sample' }
-      put "readings/", r2
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 'text', units_salinity: 'ppm', description: 'sample description' }
 
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(400)
       expect(Reading.count).to eq(2)
-
     end
+
+    it 'Missing units_salinity parameter fails, when salinity parameter is passed' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 23, description: 'sample description' }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+
   end
+
 
   describe 'Delete reading' do
     it 'Delete r2' do

@@ -25,9 +25,14 @@ class ReadingsController < ApplicationController
       return input_error(:salinity)
     end
 
+    if params[:salinity] != nil and is_invalid_string_param(:units_salinity)
+      return input_error(:units_salinity)
+    end
+
     if is_invalid_string_param(:units_depth)
       return input_error(:units_depth)
     end
+
 
     reading = Reading.create(reading_params)
 
