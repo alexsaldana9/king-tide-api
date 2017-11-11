@@ -20,6 +20,10 @@ class ReadingsController < ApplicationController
       return input_error(:depth)
     end
 
+    if params[:salinity] != nil and is_invalid_float_param(:salinity)
+      return input_error(:salinity)
+    end
+
     if is_invalid_string_param(:units_depth)
       return input_error(:units_depth)
     end

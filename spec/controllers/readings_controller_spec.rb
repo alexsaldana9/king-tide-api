@@ -23,9 +23,17 @@ describe ReadingsController , :type => :api do
   end
 
   describe 'Create reading' do
-    it 'Create reading' do
+    it 'Create reading with all parameters' do
       header 'apiKey', 'keysample'
       post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description' }
+
+      expect(last_response.status).to eq(200)
+      expect(Reading.count).to eq(3)
+    end
+
+    it 'Can create reading with no salinity' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', description: 'sample description' }
 
       expect(last_response.status).to eq(200)
       expect(Reading.count).to eq(3)
@@ -78,6 +86,13 @@ describe ReadingsController , :type => :api do
       expect(Reading.count).to eq(2)
     end
 
+    it 'Invalid salinity will fail' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 'gross', units_salinity: 'ppm', description: 'sample description' }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
   end
 
   describe 'Update reading' do
