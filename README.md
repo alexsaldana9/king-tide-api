@@ -1,24 +1,46 @@
-# README
+# King-Tide-API  
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[![Build Status](https://travis-ci.org/alexsaldana9/king-tide-api.svg?branch=master)](https://travis-ci.org/alexsaldana9/king-tide-api)
 
-Things you may want to cover:
 
-* Ruby version
 
-* System dependencies
+## Dependencies  
 
-* Configuration
+    - Ruby version - ruby 2.4.1 
+    - postgres 
+    - sqlite
 
-* Database creation
+## How to run the app  
 
-* Database initialization
+```bash
+$ rails s
+```
 
-* How to run the test suite
+When dependencies or the database change run this 
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+$ bundle install
+$ rails db:create
+$ rails db:migrate
+$ rails db:seed
+```
 
-* Deployment instructions
+## How to run the tests
 
-* ...
+ `$ rspec`
+
+When the database changes, you need to change the Test database.
+
+```bash
+$ RAILS_ENV=test rails db:drop
+$ RAILS_ENV=test rails db:create
+$ RAILS_ENV=test rails db:migrate
+```
+
+## Deployment instructions 
+
+```bash
+$ git push origin master`
+```
+   
+Deployment is in Heroku, and build is in Travis CI. Once the bill is OK, then it is deployed to Heroku automatically.
