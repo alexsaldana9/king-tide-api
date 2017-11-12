@@ -246,6 +246,13 @@ describe ReadingsController , :type => :api do
       expect(Reading.all.map(&:deleted)).to eq([false, false])
     end
 
+    it 'Id that does not exists, returns 404' do
+      header 'apiKey', 'keysample'
+      delete "readings/",  { id: -1 }
+
+      expect(last_response.status).to eq(404)
+      expect(Reading.all.map(&:deleted)).to eq([false, false])
+    end
   end
 
 end

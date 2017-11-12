@@ -94,8 +94,13 @@ class ReadingsController < ApplicationController
     # puts "DEBUG-END"
 
     reading = Reading.find_by(id: params[:id])
+
+    if reading == nil
+      return not_found('record not found')
+    end
+
     reading.deleted = true
-    reading.save
+    reading.save!
     render :json => {status: 'Record deleted'}
 
   end
