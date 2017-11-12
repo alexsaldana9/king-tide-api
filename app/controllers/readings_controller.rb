@@ -23,7 +23,23 @@ class ReadingsController < ApplicationController
   end
 
   def approve_reading
-    
+    p "approve; params=#{params}"
+
+    reading = Reading.find_by(id: params[:id])
+
+    if reading == nil
+      return not_found('record not found')
+    end
+
+    if reading.deleted == true
+      return not_found('already deleted')
+    end
+
+    reading.update!(approved: true)
+
+    p "approve; result=success; reading_id=#{reading.id};"
+
+    render :json => reading
   end
 
   def create
@@ -82,7 +98,7 @@ class ReadingsController < ApplicationController
   private
 
   def reading_params
-    params.permit(:depth, :units_depth, :salinity, :units_salinity, :description)
+    params.permit(:depth, :units_depth, :salinity, :units_salinity, :description, :approved, :deleted)
   end
 
 end

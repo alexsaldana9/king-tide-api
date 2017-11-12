@@ -22,7 +22,7 @@ describe ReadingsController , :type => :api do
     expect(json.each.to_json).to eq(readings)
   end
 
-  describe 'Approved Readings' do
+  describe 'Read Approved Readings' do
     it 'responds with approved readings' do
       @r1.approved = true
       @r1.save
@@ -41,13 +41,14 @@ describe ReadingsController , :type => :api do
       @r2.deleted = true
       @r2.save
 
-
       get "readings/approved"
 
       expect(last_response.status).to eq(200)
       expect(json.each.to_json).to eq([@r1].each.to_json)
     end
+  end
 
+  describe "Read Pending readings" do
     it 'responds with pending readings' do
       @r1.approved = true
       @r1.save
@@ -72,6 +73,38 @@ describe ReadingsController , :type => :api do
       expect(last_response.status).to eq(200)
       expect(json.each.to_json).to eq([@r1].each.to_json)
     end
+  end
+
+  describe 'Approve reading' do
+    it 'Approve reading changes its approved status' do
+      header 'apiKey', 'keysample'
+      post "readings/approve", { id: @r1.id }
+
+      expect(last_response.status).to eq(200)
+      expect(Reading.count).to eq(2)
+      expect(Reading.where(id: @r1.id).map(&:approved)).to eq([true])
+      expect(Reading.where(id: @r2.id).map(&:approved)).to eq([false])
+    end
+
+    it 'Approve reading does not modify deleted records' do
+      @r1.deleted = true
+      @r1.save
+
+      header 'apiKey', 'keysample'
+      post "readings/approve", { id: @r1.id }
+
+      expect(last_response.status).to eq(404)
+      expect(Reading.all.map(&:approved)).to eq([false, false])
+    end
+
+    it 'Id that does not exists, returns 404' do
+      header 'apiKey', 'keysample'
+      post "readings/approve", { id: -1 }
+
+      expect(last_response.status).to eq(404)
+      expect(Reading.all.map(&:approved)).to eq([false, false])
+    end
+
   end
 
   describe 'Create reading' do
@@ -172,7 +205,6 @@ describe ReadingsController , :type => :api do
       expect(Reading.count).to eq(2)
     end
   end
-
 
   describe 'Delete reading' do
     it 'Delete r2' do

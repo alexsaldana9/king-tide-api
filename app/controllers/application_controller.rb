@@ -8,6 +8,10 @@ class ApplicationController < ActionController::API
     return render :json => {error: 'Input error'}, status: 400
   end
 
+  def not_found(message)
+    p "not_found; reason= #{message}"
+    return render :json => {error: 'Not found'}, status: 404
+  end
 
   def request_is_not_authorized
     # return request_is_authorized == false
