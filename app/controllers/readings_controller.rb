@@ -23,7 +23,12 @@ class ReadingsController < ApplicationController
   end
 
   def approve_reading
+
     p "approve; params=#{params}"
+
+    if request_is_not_authorized
+      return unauthorized_request
+    end
 
     reading = Reading.find_by(id: params[:id])
 

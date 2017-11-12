@@ -76,6 +76,22 @@ describe ReadingsController , :type => :api do
   end
 
   describe 'Approve reading' do
+    it 'If key is not passed, record not approved' do
+      post "readings/approve", { id: @r1.id }
+
+      expect(last_response.status).to eq(401)
+      expect(Reading.all.map(&:approved)).to eq([false, false])
+    end
+
+    it 'If key is invalid, record not approved' do
+      header 'apiKey', 'invalidKEY'
+
+      post "readings/approve", { id: @r1.id }
+
+      expect(last_response.status).to eq(401)
+      expect(Reading.all.map(&:approved)).to eq([false, false])
+    end
+
     it 'Approve reading changes its approved status' do
       header 'apiKey', 'keysample'
       post "readings/approve", { id: @r1.id }
