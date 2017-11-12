@@ -19,14 +19,6 @@ test:
   pool: 5
   timeout: 5000
 
-#test:
-#  <<: *default
-#  database: king-tide-api_test
-#  username: alexandrasaldana
-#  password:
-#  host: localhost
-#  port: 5432
-
 production:
   <<: *default
   database: king-tide-api_production
