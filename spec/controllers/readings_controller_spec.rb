@@ -33,6 +33,31 @@ describe ReadingsController , :type => :api do
       expect(json.each.to_json).to eq([@r1].each.to_json)
     end
 
+    it 'responds with approved readings and does not show deleted' do
+      @r1.approved = true
+      @r1.save
+      @r2.approved = true
+      @r2.save
+      @r2.deleted = true
+      @r2.save
+
+
+      get "readings/approved"
+
+      expect(last_response.status).to eq(200)
+      expect(json.each.to_json).to eq([@r1].each.to_json)
+    end
+
+    it 'responds with pending readings' do
+      @r1.approved = true
+      @r1.save
+
+      get "readings/pending"
+
+      expect(last_response.status).to eq(200)
+      expect(json.each.to_json).to eq([@r2].each.to_json)
+    end
+
     it 'responds with non-deleted readings' do
       @r1.approved = true
       @r2.deleted = false

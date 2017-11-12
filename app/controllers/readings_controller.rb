@@ -16,6 +16,16 @@ class ReadingsController < ApplicationController
     render :json => reading
   end
 
+  def get_pending
+    reading = Reading.where(approved: false)
+                    .where(deleted: false)
+    render :json => reading
+  end
+
+  def approve_reading
+    
+  end
+
   def create
     p "create; params=#{params}"
 

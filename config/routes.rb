@@ -7,8 +7,12 @@ Rails.application.routes.draw do
 
   get 'readings/all', to: 'readings#get_all'
   get 'readings/approved', to: 'readings#get_all_approved'
+  get 'readings/pending', to: 'readings#get_pending'
   get 'readings/:id', to: 'readings#get'
+
   post 'readings/', to: 'readings#create'
+  post 'readings/approve', to: 'readings#approve_reading'
+
   delete 'readings/', to: 'readings#delete'
 
 end
