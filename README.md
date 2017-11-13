@@ -27,8 +27,9 @@ $ rails db:seed
 
 ## How to run the tests
 
- `$ rspec`
-
+```bash
+ $ rspec
+```
 When the database changes, you need to change the Test database.
 
 ```bash
@@ -40,7 +41,7 @@ $ RAILS_ENV=test rails db:migrate
 ## Deployment instructions 
 
 ```bash
-$ git push origin master`
+$ git push origin master
 ```
    
 Deployment is in Heroku, and build is in Travis CI. Once the bill is OK, then it is deployed to Heroku automatically.
