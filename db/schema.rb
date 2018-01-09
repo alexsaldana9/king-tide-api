@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171111222511) do
+ActiveRecord::Schema.define(version: 20180109142540) do
 
   create_table "readings", force: :cascade do |t|
     t.float "depth"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 20171111222511) do
     t.datetime "updated_at", null: false
     t.boolean "approved"
     t.boolean "deleted"
+    t.float "latitude"
+    t.float "longitude"
   end
 
   create_table "secretkeys", force: :cascade do |t|
