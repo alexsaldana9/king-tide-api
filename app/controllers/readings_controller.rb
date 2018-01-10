@@ -108,7 +108,17 @@ class ReadingsController < ApplicationController
   private
 
   def reading_params
-    params.permit(:depth, :units_depth, :salinity, :units_salinity, :description, :approved, :deleted)
+    params.permit(
+        :depth,
+        :units_depth,
+        :salinity,
+        :units_salinity,
+        :description,
+        :latitude,
+        :longitude,
+        :approved,
+        :deleted
+    )
   end
 
 end

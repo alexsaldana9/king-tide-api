@@ -126,7 +126,7 @@ describe ReadingsController , :type => :api do
   describe 'Create reading' do
     it 'Create reading with all parameters' do
       header 'apiKey', 'keysample'
-      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description' }
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'FIU Nature Preserve - location- sample', latitude: 25.7548106, longitude: -80.3793627}
 
       expect(last_response.status).to eq(200)
       expect(Reading.count).to eq(3)
@@ -136,10 +136,11 @@ describe ReadingsController , :type => :api do
       expect(created_reading.units_depth).to eq('feet')
       expect(created_reading.salinity).to eq(30)
       expect(created_reading.units_salinity).to eq('ppm')
-      expect(created_reading.description).to eq('sample description')
+      expect(created_reading.description).to eq('FIU Nature Preserve - location- sample')
+      expect(created_reading.latitude).to eq(25.7548106)
+      expect(created_reading.longitude).to eq(-80.3793627)
       expect(created_reading.approved).to eq(false)
       expect(created_reading.deleted).to eq(false)
-
     end
 
     it 'Can create reading with no salinity' do
