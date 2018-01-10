@@ -54,70 +54,39 @@ class ReadingsController < ApplicationController
       return unauthorized_request
     end
 
-    if params[:latitude].to_f.between?(-90, 90)
-      if params[:longitude].to_f.between?(-180, 180)
-
-        if is_invalid_float_param(:depth)
-          return input_error(:depth)
-        end
-
-        if params[:salinity] != nil and is_invalid_float_param(:salinity)
-          return input_error(:salinity)
-        end
-
-        if params[:salinity] != nil and is_invalid_string_param(:units_salinity)
-          return input_error(:units_salinity)
-        end
-
-        if is_invalid_string_param(:units_depth)
-          return input_error(:units_depth)
-        end
-      end
+    if is_invalid_float_param(:depth)
+      return input_error(:depth)
     end
 
+    if params[:salinity] != nil and is_invalid_float_param(:salinity)
+      return input_error(:salinity)
+    end
 
-    if params[:latitude] != nil and is_invalid_coordinate_float_param()
-      if params[:longitude] != nil and is_invalid_coordinate_float_param()
+    if params[:salinity] != nil and is_invalid_string_param(:units_salinity)
+      return input_error(:units_salinity)
+    end
 
-        if is_invalid_float_param(:depth)
-          return input_error(:depth)
-        end
+    if is_invalid_string_param(:units_depth)
+      return input_error(:units_depth)
+    end
 
-        if params[:salinity] != nil and is_invalid_float_param(:salinity)
-          return input_error(:salinity)
-        end
+    if params[:latitude] != nil or params[:longitude] != nil
+      if is_invalid_float_param(:latitude)
+        return input_error(:latitude)
+      end
 
-        if params[:salinity] != nil and is_invalid_string_param(:units_salinity)
-          return input_error(:units_salinity)
-        end
-
-        if is_invalid_string_param(:units_depth)
-          return input_error(:units_depth)
-        end
-
+      if is_invalid_float_param(:longitude)
         return input_error(:longitude)
       end
-      return input_error(:latitude)
+
+      if not params[:latitude].to_f.between?(-90, 90)
+        return input_error(:latitude)
+      end
+
+      if not params[:longitude].to_f.between?(-180, 180)
+        return input_error(:longitude)
+      end
     end
-
-
-
-    # if is_invalid_float_param(:depth)
-    #   return input_error(:depth)
-    # end
-    #
-    # if params[:salinity] != nil and is_invalid_float_param(:salinity)
-    #   return input_error(:salinity)
-    # end
-    #
-    # if params[:salinity] != nil and is_invalid_string_param(:units_salinity)
-    #   return input_error(:units_salinity)
-    # end
-    #
-    # if is_invalid_string_param(:units_depth)
-    #   return input_error(:units_depth)
-    # end
-
 
     full_params = reading_params
     full_params[:approved] = false

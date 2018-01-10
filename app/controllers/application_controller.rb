@@ -41,30 +41,6 @@ class ApplicationController < ActionController::API
     not is_valid_float_param(param_name)
   end
 
-
-  def is_invalid_coordinate_float_param()
-    # if params[:latitude] != nil and (params[:latitude] < -90 || params[:latitude] > 90)
-    #   not is_valid_float_param(param_name)
-    # end
-    #
-    # if params[:longitude] != nil and (params[:longitude] < -180 || params[:longitude] > 180)
-    #   not is_valid_float_param(param_name)
-    # end
-
-
-    if (params[:latitude].to_f < -90 || params[:latitude].to_f  > 90)
-      # not is_valid_float_param(param_name)
-      return true
-    end
-
-    if (params[:longitude].to_f < -180 || params[:longitude].to_f > 180)
-      # not is_valid_float_param(param_name)
-      return true
-    end
-
-    return false
-  end
-
   # checks if the param is a float, if it is a float -> return true
   def is_valid_float_param(param_name)
     # this is the equivalent one-liner ruby-style

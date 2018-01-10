@@ -222,6 +222,22 @@ describe ReadingsController , :type => :api do
       expect(Reading.count).to eq(2)
     end
 
+    it 'Invalid latitude will fail' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: "foo", longitude: 160 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'missing latitude will fail' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', longitude: 160 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
     it 'Invalid latitude will fail, over positive side of range(-90 , 90) ex:140' do
       header 'apiKey', 'keysample'
       post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: 140, longitude: 160 }
@@ -244,6 +260,22 @@ describe ReadingsController , :type => :api do
 
       expect(last_response.status).to eq(200)
       expect(Reading.count).to eq(3)
+    end
+
+    it 'Invalid longitude will fail' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: 45, longitude: "bar" }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'Missing longitude will fail' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: 45 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
     end
 
     it 'Invalid longitude will fail, over positive side of range(-180 , 180) ex:200' do
