@@ -221,6 +221,47 @@ describe ReadingsController , :type => :api do
       expect(last_response.status).to eq(400)
       expect(Reading.count).to eq(2)
     end
+
+    it 'Invalid latitude will fail, over positive side of range(-90 , 90) ex:140' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: 140, longitude: 160 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'Invalid latitude will fail, over negative side of range(-90 , 90) ex:-140' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: -140, longitude: 160 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'Missing latitude and longitude, reading will be saved' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description' }
+
+      expect(last_response.status).to eq(200)
+      expect(Reading.count).to eq(3)
+    end
+
+    it 'Invalid longitude will fail, over positive side of range(-180 , 180) ex:200' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: 45, longitude: 200 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
+    it 'Invalid longitude will fail, over negative side of range(-180 , 180) ex:-200' do
+      header 'apiKey', 'keysample'
+      post "readings/", { depth: 3, units_depth: 'feet', salinity: 30, units_salinity: 'ppm', description: 'sample description', latitude: 45, longitude: -200 }
+
+      expect(last_response.status).to eq(400)
+      expect(Reading.count).to eq(2)
+    end
+
   end
 
   describe 'Delete reading' do
