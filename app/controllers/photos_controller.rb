@@ -5,7 +5,17 @@ class PhotosController < ApplicationController
       return unauthorized_request
     end
 
+    if params[:image] == nil
+      return input_error(:image)
+    end
 
+    if is_invalid_float_param(:reading_id)
+      return input_error(:reading_id)
+    end
+
+    if not Reading.exists?(id: params[:reading_id].to_i)
+      return input_error(:reading_id)
+    end
 
     photo = Photo.create(photo_params)
     if not photo.valid?
