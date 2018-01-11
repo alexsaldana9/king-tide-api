@@ -9,6 +9,11 @@ class PhotosController < ApplicationController
       return input_error(:image)
     end
 
+    # 1-depth, 2-salinity, 3-location, 4-other
+    if not params[:category].to_f.between?(1, 4)
+      return input_error(:category)
+    end
+
     if is_invalid_float_param(:reading_id)
       return input_error(:reading_id)
     end
@@ -25,10 +30,11 @@ class PhotosController < ApplicationController
     render :json => {result: :ok}
   end
 
+
   private
 
   def photo_params
-    params.permit(:image, :reading_id)
+    params.permit(:image, :reading_id, :category)
     # params.require(:photo).permit(:image, :reading_id)
   end
 
