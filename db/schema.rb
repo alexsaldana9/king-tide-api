@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109142540) do
+ActiveRecord::Schema.define(version: 20180111002451) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "photos", force: :cascade do |t|
+    t.bigint "reading_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
+    t.index ["reading_id"], name: "index_photos_on_reading_id"
+  end
 
   create_table "readings", force: :cascade do |t|
     t.float "depth"
@@ -33,4 +47,5 @@ ActiveRecord::Schema.define(version: 20180109142540) do
     t.string "key"
   end
 
+  add_foreign_key "photos", "readings"
 end
