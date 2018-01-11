@@ -15,4 +15,6 @@ Rails.application.routes.draw do
 
   delete 'readings/', to: 'readings#delete'
 
+  post 'photos/', to: 'photos#create'
+
 end
