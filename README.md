@@ -32,13 +32,13 @@ log into heroku, and run the command below in the online heroku console
 
 ```bash
 $ rake db:migrate
-``` 
+```
 
 ## Add a secret key to heroku
 
 ```bash
 $ rails runner "Secretkey.create(name: 'KEY_NAME', key: 'SECRET KEY')"
-``` 
+```
     
 ## Delete a secret key from heroku
 
