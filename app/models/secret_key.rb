@@ -12,9 +12,7 @@ class SecretKey < ApplicationRecord
       SecretKey
           .select(:key)
           .distinct
-          .map {|s| s.key}
-          .to_a
-          .sort
+          .map(&:key)
     end
   end
 end
