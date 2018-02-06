@@ -1,15 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  depth: 1.5
-  units_depth: MyString
-  salinity: 1
-  units_salinity: MyString
-  description: MyText
+  depth: 2.0
+  units_depth: 'inches'
+  salinity: 100
+  units_salinity: 'ppt'
+  description: 'Flood at Vizcaya'
+  approved: false
+  deleted: false
 
 two:
-  depth: 1.5
-  units_depth: MyString
-  salinity: 1
-  units_salinity: MyString
-  description: MyText
+  depth: 4.0
+  units_depth: 'inches'
+  salinity: 50
+  units_salinity: 'ppt'
+  description: 'Flood at Brickell'
+  approved: false
+  deleted: false

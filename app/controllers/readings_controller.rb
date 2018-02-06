@@ -17,8 +17,8 @@ class ReadingsController < ApplicationController
   end
 
   def get_pending
-    reading = Reading.where(approved: false)
-                    .where(deleted: false)
+    reading = Reading.where(deleted: false)
+                  .where(approved: false)
     render :json => reading
   end
 
