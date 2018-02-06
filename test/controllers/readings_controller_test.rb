@@ -2,7 +2,6 @@ require 'test_helper'
 
 class ReadingsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    key = Secretkey.create(name: 'sample', key: 'keysample')
     @r1 = readings(:one)
     @r2 = readings(:two)
   end
