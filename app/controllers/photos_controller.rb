@@ -1,10 +1,8 @@
 class PhotosController < ApplicationController
 
-  def create
-    if request_is_not_authorized
-      return unauthorized_request
-    end
+  before_action :validate_authorization
 
+  def create
     if params[:image] == nil
       return input_error(:image)
     end

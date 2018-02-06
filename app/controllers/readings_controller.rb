@@ -1,8 +1,6 @@
 class ReadingsController < ApplicationController
 
-  before_action :validate_authorization, only: [
-      :create, :approve, :delete
-  ]
+  before_action :validate_authorization, only: [:create, :approve, :delete]
 
   def get_all
     readings = Reading.all.each
@@ -49,10 +47,6 @@ class ReadingsController < ApplicationController
 
   def create
     p "create; params=#{params}"
-
-    if request_is_not_authorized
-      return unauthorized_request
-    end
 
     if is_invalid_float_param(:depth)
       return input_error(:depth)

@@ -1,8 +1,4 @@
 class ApplicationController < ActionController::API
-  def unauthorized_request
-    return render :json => {error: 'Unauthorized'}, status: 401
-  end
-
   def input_error(param_name="N/A")
     p "input_error; param_name=#{param_name}"
     return render :json => {error: 'Input error'}, status: 400
@@ -14,14 +10,9 @@ class ApplicationController < ActionController::API
   end
 
   def validate_authorization
-    if request_is_not_authorized
-      return unauthorized_request
+    if not request_is_authorized
+      render :json => {error: 'Unauthorized'}, status: 401
     end
-  end
-
-  def request_is_not_authorized
-    # return request_is_authorized == false
-    not request_is_authorized
   end
 
   def request_is_authorized
