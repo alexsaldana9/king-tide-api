@@ -6,7 +6,24 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+Reading.destroy_all
 
-r1 = Reading.create(depth: 2.0, units_depth: 'inches', salinity: 100, units_salinity: 'ppt', description: 'Flood at Vizcaya' )
-r2 = Reading.create(depth: 4.0, units_depth: 'inches', salinity: 50, units_salinity: 'ppt', description: 'Flood at Brickell' )
+Reading.create(
+  depth: 2.0,
+  units_depth: 'inches',
+  salinity: 100,
+  units_salinity: 'ppt',
+  description: 'Flood at Vizcaya',
+  approved: false,
+  deleted: false
+)
 
+Reading.create(
+  depth: 4.0,
+  units_depth: 'inches',
+  salinity: 50,
+  units_salinity: 'ppt',
+  description: 'Flood at Brickell',
+  approved: false,
+  deleted: false
+)
