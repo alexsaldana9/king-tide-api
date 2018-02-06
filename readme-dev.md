@@ -15,6 +15,16 @@ curl http://localhost:3001/readings/pending/ | json_pp
 curl http://localhost:3001/readings/approved/ | json_pp
 ```
 
+## failed attempt to create a reading  
+
+```bash
+curl -X POST \
+  -H 'apiKey:INVALID_KEY' \
+  -F 'depth=3' \
+  -F 'units_depth=feet' \
+  http://localhost:3001/readings/ | json_pp
+```
+
 ## create a reading  
 
 ```bash
@@ -22,11 +32,10 @@ curl -X POST \
   -H 'apiKey:dev_secret' \
   -F 'depth=3' \
   -F 'units_depth=feet' \
-  -F 'description=empty' \
   http://localhost:3001/readings/ | json_pp
 ```
 
-## approve a reading
+## approve a reading  
 
 ```bash
 curl -X POST \
@@ -35,7 +44,7 @@ curl -X POST \
   http://localhost:3001/readings/approve | json_pp
 ```
 
-## delete a reading
+## delete a reading  
 
 ```bash
 curl -X DELETE \

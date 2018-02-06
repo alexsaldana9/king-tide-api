@@ -10,26 +10,8 @@ class ApplicationController < ActionController::API
   end
 
   def validate_authorization
-    if not request_is_authorized
+    if not SecretKey.is_valid(request.headers['apiKey'])
       render :json => {error: 'Unauthorized'}, status: 401
-    end
-  end
-
-  def request_is_authorized
-    # Secretkey.where(key: apiKey).empty?
-    # this looks for the secret key that is passed as a request.header
-    # if it is false, it means that there is a valid apiKey that matches the header
-
-    # p "<<<<DEBUG-START All the headers"
-    # p request.headers["apiKey"]
-    # p request.headers
-    # p "<<<<DEBUG-END All the headers"
-
-    apiKey = request.headers["apiKey"]
-    if apiKey and SecretKey.where(key: apiKey).empty? == false
-      return true
-    else
-      return false
     end
   end
 
