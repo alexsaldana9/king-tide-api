@@ -48,10 +48,10 @@ Rails.application.configure do
   config.paperclip_defaults = { 
     storage: :fog,
     fog_credentials: {
-      provider: "Local",
-      local_root: "#{Rails.root}/public"
+      provider: 'Local',
+      local_root: "#{Rails.root}/tmp"
     },
-    fog_directory: "",
-    fog_host: "localhost"
+    fog_directory: '',
+    fog_host: 'localhost'
   }
 end
