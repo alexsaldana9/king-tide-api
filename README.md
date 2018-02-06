@@ -37,13 +37,13 @@ $ rake db:migrate
 ## Add a secret key to heroku
 
 ```bash
-$ rails runner "Secretkey.create(name: 'KEY_NAME', key: 'SECRET KEY')"
+$ rails runner "SecretKey.create(name: 'KEY_NAME', key: 'SECRET KEY')"
 ```
     
 ## Delete a secret key from heroku
 
 ```bash
-rails runner "Secretkey.where(name: 'KEY_NAME').destroy_all"
+rails runner "SecretKey.where(name: 'KEY_NAME').destroy_all"
 ```
 
 ## How to run the tests

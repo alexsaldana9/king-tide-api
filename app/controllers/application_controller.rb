@@ -29,7 +29,7 @@ class ApplicationController < ActionController::API
     # p "<<<<DEBUG-END All the headers"
 
     apiKey = request.headers["apiKey"]
-    if apiKey and Secretkey.where(key: apiKey).empty? == false
+    if apiKey and SecretKey.where(key: apiKey).empty? == false
       return true
     else
       return false
