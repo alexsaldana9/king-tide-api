@@ -6,7 +6,7 @@
 
 ## Dependencies  
 
-    - Ruby version - ruby 2.4.1 
+    - Ruby version - ruby 2.5.0
     - postgres 
     - sqlite
 
