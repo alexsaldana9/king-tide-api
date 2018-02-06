@@ -13,6 +13,12 @@ class ApplicationController < ActionController::API
     return render :json => {error: 'Not found'}, status: 404
   end
 
+  def validate_authorization
+    if request_is_not_authorized
+      return unauthorized_request
+    end
+  end
+
   def request_is_not_authorized
     # return request_is_authorized == false
     not request_is_authorized

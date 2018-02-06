@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'readings/:id', to: 'readings#get'
 
   post 'readings/', to: 'readings#create'
-  post 'readings/approve', to: 'readings#approve_reading'
+  post 'readings/approve', to: 'readings#approve'
 
   delete 'readings/', to: 'readings#delete'
 

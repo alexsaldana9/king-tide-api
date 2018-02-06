@@ -1,5 +1,9 @@
 class ReadingsController < ApplicationController
 
+  before_action :validate_authorization, only: [
+      :create, :approve, :delete
+  ]
+
   def get_all
     readings = Reading.all.each
     render :json => readings
@@ -22,13 +26,9 @@ class ReadingsController < ApplicationController
     render :json => reading
   end
 
-  def approve_reading
+  def approve
 
     p "approve; params=#{params}"
-
-    if request_is_not_authorized
-      return unauthorized_request
-    end
 
     reading = Reading.find_by(id: params[:id])
 
@@ -101,11 +101,7 @@ class ReadingsController < ApplicationController
 
   def delete
     # Need to allow this method only for admin, add another field to get the name of person that deleted
-    #Or maybe this method is not necessary, this can complicate the data management
-
-    if request_is_not_authorized
-      return unauthorized_request
-    end
+    # Or maybe this method is not necessary, this can complicate the data management
 
     # puts "DEBUG-START"
     # puts "#{params}"
