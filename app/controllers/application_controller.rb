@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  def input_error(param_name="N/A")
+  def input_error(param_name='N/A')
     p "input_error; param_name=#{param_name}"
     return render :json => {error: 'Input error'}, status: 400
   end
