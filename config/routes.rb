@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root to: 'readings#get_all'
+  root to: 'status#index'
 
-  get 'status/get', to: 'status#get_status'
+  resources :status
 
-  get 'readings/all', to: 'readings#get_all'
-  get 'readings/approved', to: 'readings#get_all_approved'
-  get 'readings/pending', to: 'readings#get_pending'
+  get 'readings/all', to: 'readings#all'
+  get 'readings/approved', to: 'readings#approved'
+  get 'readings/pending', to: 'readings#pending'
   get 'readings/:id', to: 'readings#get'
 
   post 'readings/', to: 'secure/readings#create'
