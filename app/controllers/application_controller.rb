@@ -9,12 +9,6 @@ class ApplicationController < ActionController::API
     return render :json => {error: 'Not found'}, status: 404
   end
 
-  def validate_authorization
-    if not SecretKey.is_valid(request.headers['apiKey'])
-      render :json => {error: 'Unauthorized'}, status: 401
-    end
-  end
-
   def is_invalid_float_param(param_name)
     # return is_valid_float_param(param_name) == false
     not is_valid_float_param(param_name)

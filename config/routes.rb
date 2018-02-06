@@ -10,11 +10,10 @@ Rails.application.routes.draw do
   get 'readings/pending', to: 'readings#get_pending'
   get 'readings/:id', to: 'readings#get'
 
-  post 'readings/', to: 'readings#create'
-  post 'readings/approve', to: 'readings#approve'
+  post 'readings/', to: 'secure/readings#create'
+  post 'readings/approve', to: 'secure/readings#approve'
+  delete 'readings/', to: 'secure/readings#delete'
 
-  delete 'readings/', to: 'readings#delete'
-
-  post 'photos/', to: 'photos#create'
+  post 'photos/', to: 'secure/photos#create'
 
 end

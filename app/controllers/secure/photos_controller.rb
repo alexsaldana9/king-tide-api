@@ -1,7 +1,4 @@
-class PhotosController < ApplicationController
-
-  before_action :validate_authorization
-
+class Secure::PhotosController < Secure::ApplicationController
   def create
     if params[:image] == nil
       return input_error(:image)
@@ -22,18 +19,16 @@ class PhotosController < ApplicationController
 
     photo = Photo.create(photo_params)
     if not photo.valid?
-      return render :json => {error: 'Photo not saved'}, status: 400
+      return render :json => { error: 'Photo not saved' }, status: 400
     end
 
     render :json => {result: :ok}
   end
 
-
   private
 
   def photo_params
     params.permit(:image, :reading_id, :category)
-    # params.require(:photo).permit(:image, :reading_id)
   end
 
 end
