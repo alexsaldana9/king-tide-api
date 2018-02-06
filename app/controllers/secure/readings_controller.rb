@@ -67,12 +67,7 @@ class Secure::ReadingsController < Secure::ApplicationController
   end
 
   def delete
-    # Need to allow this method only for admin, add another field to get the name of person that deleted
-    # Or maybe this method is not necessary, this can complicate the data management
-
-    # puts "DEBUG-START"
-    # puts "#{params}"
-    # puts "DEBUG-END"
+    p "delete; params=#{params}"
 
     reading = Reading.find_by(id: params[:id])
 
@@ -83,7 +78,6 @@ class Secure::ReadingsController < Secure::ApplicationController
     reading.deleted = true
     reading.save!
     render :json => {status: 'Record deleted'}
-
   end
 
   private
