@@ -31,7 +31,7 @@ $ rails db:seed
 log into heroku, and run the command below in the online heroku console
 
 ```bash
-$ rake db:migrate
+$ rails db:migrate
 ```
 
 ## Add a secret key to heroku
@@ -49,7 +49,7 @@ rails runner "SecretKey.where(name: 'KEY_NAME').destroy_all"
 ## How to run the tests
 
 ```bash
- $ rspec
+$ rails t
 ```
 When the database changes, you need to change the Test database.
 
