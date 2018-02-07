@@ -1,5 +1,5 @@
 class StatusController < ApplicationController
   def index
-    render :json => {status: 'OK'}
+    return success
   end
 end

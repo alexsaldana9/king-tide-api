@@ -63,7 +63,7 @@ class Secure::ReadingsController < Secure::ApplicationController
 
     p "approve; result=success; reading_id=#{reading.id};"
 
-    render :json => reading
+    return success
   end
 
   def delete
@@ -77,7 +77,8 @@ class Secure::ReadingsController < Secure::ApplicationController
 
     reading.deleted = true
     reading.save!
-    render :json => {status: 'Record deleted'}
+
+    return success
   end
 
   private

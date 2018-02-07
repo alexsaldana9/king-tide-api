@@ -19,10 +19,10 @@ class Secure::PhotosController < Secure::ApplicationController
 
     photo = Photo.create(photo_params)
     if not photo.valid?
-      return render :json => { error: 'Photo not saved' }, status: 400
+      return client_error 'Photo not saved'
     end
 
-    render :json => {result: :ok}
+    return success
   end
 
   private

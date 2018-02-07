@@ -1,4 +1,8 @@
 class ApplicationController < ActionController::API
+  def success
+    return render :json => { status: :ok }
+  end
+
   def input_error(param_name='N/A')
     p "input_error; param_name=#{param_name}"
     return render :json => {error: 'Input error'}, status: 400
@@ -7,6 +11,11 @@ class ApplicationController < ActionController::API
   def not_found(message)
     p "not_found; reason= #{message}"
     return render :json => {error: 'Not found'}, status: 404
+  end
+
+  def client_error(message='N/A', status_code=400)
+    p "client_error; reason= #{message}"
+    return render :json => { error: message }, status: status_code
   end
 
   def is_invalid_float_param(param_name)
