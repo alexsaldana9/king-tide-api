@@ -10,11 +10,16 @@ class Secure::PhotosController < Secure::ApplicationController
     end
 
     if is_invalid_float_param(:reading_id)
-      return input_error(:reading_id)
+      return input_error(:reading_id, 'invalid value')
     end
 
-    if not Reading.exists?(id: params[:reading_id].to_i)
-      return input_error(:reading_id)
+    reading = Reading.find_by_id(params[:reading_id])
+    if not reading
+      return input_error(:reading_id, 'not found')
+    end
+
+    if reading.approved
+      return input_error(:reading_id, 'approved readings cannot be changed')
     end
 
     photo = Photo.create(photo_params)
@@ -22,6 +27,7 @@ class Secure::PhotosController < Secure::ApplicationController
       return client_error 'Photo not saved'
     end
 
+    p "create; result=success; photo_id=#{photo.id}, reading_id=#{reading.id}"
     return success
   end
 
