@@ -6,17 +6,21 @@ class ReadingTest < ActiveSupport::TestCase
   end
 
   test 'soft deletes the reading' do
+    all_readings_count = Reading.count
     assert_not @r1.deleted?
+    assert_equal all_readings_count, Reading.existent.count
 
     @r1.delete!
 
     assert @r1.deleted?
     assert Reading.find(@r1.id).deleted?
+    assert_equal all_readings_count - 1, Reading.existent.count
 
     @r1.delete!
 
     assert @r1.deleted?
     assert Reading.find(@r1.id).deleted?
+    assert_equal all_readings_count - 1, Reading.existent.count
   end
 
   test 'approves the reading' do
