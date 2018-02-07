@@ -25,8 +25,8 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
     assert_equal 2, Reading.count
-    assert_equal [true], Reading.where(id: @r1.id).map(&:approved)
-    assert_equal [false], Reading.where(id: @r2.id).map(&:approved)
+    assert Reading.find(@r1.id).approved?
+    assert_not Reading.find(@r2.id).approved?
   end
 
   test 'approve reading does not modify deleted records' do

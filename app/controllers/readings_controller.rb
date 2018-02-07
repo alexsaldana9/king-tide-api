@@ -11,15 +11,13 @@ class ReadingsController < ApplicationController
   end
 
   def approved
-    readings = Reading.where(deleted: false)
-                   .where(approved: true)
+    readings = Reading.where(deleted: false, approved: true)
     render :json => readings
   end
 
   def pending
-    reading = Reading.where(deleted: false)
-                  .where(approved: false)
-    render :json => reading
+    readings = Reading.where(deleted: false, approved: false)
+    render :json => readings
   end
 
   private
