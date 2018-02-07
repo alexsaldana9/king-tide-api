@@ -1,7 +1,16 @@
 class ReadingsController < ApplicationController
 
   def get
-    reading = Reading.find(params[:id])
+    if is_invalid_float_param(:id)
+      return input_error(:id)
+    end
+
+    reading = Reading.existent.find_by_id(params[:id])
+
+    if not reading
+      return not_found
+    end
+
     render :json => reading
   end
 

@@ -6,6 +6,34 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
     @r2 = readings(:two)
   end
 
+  test 'returns the reading details' do
+    get "/readings/#{@r1.id}", as: :json
+
+    assert_response 200
+
+    assert_equal @r1.to_json, response.body
+  end
+
+  test 'returns client error when reading id is invalid' do
+    get '/readings/invalid_reading', as: :json
+
+    assert_response 400
+  end
+
+  test 'returns not found when reading id does not exist' do
+    get '/readings/-1', as: :json
+
+    assert_response 404
+  end
+
+  test 'returns not found when reading is deleted' do
+    @r1.delete!
+
+    get "/readings/#{@r1.id}", as: :json
+
+    assert_response 404
+  end
+
   test 'reads all readings' do
     get '/readings/all', as: :json
 
