@@ -55,7 +55,7 @@ class Secure::ReadingsController < Secure::ApplicationController
       return not_found('record not found')
     end
 
-    if reading.deleted
+    if reading.deleted?
       return not_found('already deleted')
     end
 

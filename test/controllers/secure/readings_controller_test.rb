@@ -69,8 +69,8 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'FIU Nature Preserve - location- sample', created_reading.description
     assert_equal 25.7548106, created_reading.latitude
     assert_equal -80.3793627, created_reading.longitude
-    assert_equal false, created_reading.approved
-    assert_equal false, created_reading.deleted
+    assert_not created_reading.approved?
+    assert_not created_reading.deleted?
   end
 
   test 'can create reading with no salinity' do
@@ -354,8 +354,8 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'keysample'}
 
     assert_response 200
-    assert_equal false, Reading.find_by_id(@r1.id).deleted
-    assert_equal true, Reading.find_by_id(@r2.id).deleted
+    assert_not Reading.find_by_id(@r1.id).deleted?
+    assert Reading.find_by_id(@r2.id).deleted?
   end
 
   test 'does not delete, when apiKey is invalid' do

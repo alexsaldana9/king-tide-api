@@ -6,30 +6,30 @@ class ReadingTest < ActiveSupport::TestCase
   end
 
   test 'soft deletes the reading' do
-    assert_equal false, @r1.deleted
+    assert_not @r1.deleted?
 
     @r1.delete!
 
-    assert_equal true, @r1.deleted
-    assert_equal true, Reading.find_by_id(@r1.id).deleted
+    assert @r1.deleted?
+    assert Reading.find_by_id(@r1.id).deleted?
 
     @r1.delete!
 
-    assert_equal true, @r1.deleted
-    assert_equal true, Reading.find_by_id(@r1.id).deleted
+    assert @r1.deleted?
+    assert Reading.find_by_id(@r1.id).deleted?
   end
 
   test 'approves the reading' do
-    assert_equal false, @r1.approved
+    assert_not @r1.approved?
 
     @r1.approve!
 
-    assert_equal true, @r1.approved
-    assert_equal true, Reading.find_by_id(@r1.id).approved
+    assert @r1.approved?
+    assert Reading.find_by_id(@r1.id).approved?
 
     @r1.approve!
 
-    assert_equal true, @r1.approved
-    assert_equal true, Reading.find_by_id(@r1.id).approved
+    assert @r1.approved?
+    assert Reading.find_by_id(@r1.id).approved?
   end
 end
