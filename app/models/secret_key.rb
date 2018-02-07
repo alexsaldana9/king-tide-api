@@ -9,10 +9,7 @@ class SecretKey < ApplicationRecord
 
   def self.read_all_keys
     Rails.cache.fetch('SecretKey.AllKeys', expires_in: 1.minute) do
-      SecretKey
-          .select(:key)
-          .distinct
-          .map(&:key)
+      SecretKey.distinct.pluck(:key)
     end
   end
 end
