@@ -55,7 +55,7 @@ class Secure::ReadingsController < Secure::ApplicationController
       return not_found
     end
 
-    reading.update!(approved: true)
+    reading.approve!
 
     logger.info "approve; result=success; reading_id=#{reading.id};"
 
