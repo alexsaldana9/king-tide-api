@@ -23,3 +23,8 @@ Reading.create(
   units_salinity: 'ppt',
   description: 'Flood at Brickell'
 )
+
+p "Reading.count:              #{Reading.count}"
+p "Reading.with_deleted.count: #{Reading.with_deleted.count}"
+p "Photo.count:                #{Photo.count}"
+p "Photo.with_deleted.count:   #{Photo.with_deleted.count}"
