@@ -15,18 +15,15 @@ class ReadingsController < ApplicationController
   end
 
   def all
-    readings = Reading.existent
-    render :json => readings
+    render :json => Reading.existent
   end
 
   def approved
-    readings = Reading.existent.where(approved: true)
-    render :json => readings
+    render :json => Reading.approved
   end
 
   def pending
-    readings = Reading.existent.where(approved: false)
-    render :json => readings
+    render :json => Reading.pending
   end
 
   private
