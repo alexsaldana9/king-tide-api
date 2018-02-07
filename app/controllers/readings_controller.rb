@@ -1,7 +1,7 @@
 class ReadingsController < ApplicationController
 
   def get
-    reading = Reading.find_by(id: params[:id])
+    reading = Reading.find(params[:id])
     render :json => reading
   end
 

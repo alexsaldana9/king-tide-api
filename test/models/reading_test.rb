@@ -11,12 +11,12 @@ class ReadingTest < ActiveSupport::TestCase
     @r1.delete!
 
     assert @r1.deleted?
-    assert Reading.find_by_id(@r1.id).deleted?
+    assert Reading.find(@r1.id).deleted?
 
     @r1.delete!
 
     assert @r1.deleted?
-    assert Reading.find_by_id(@r1.id).deleted?
+    assert Reading.find(@r1.id).deleted?
   end
 
   test 'approves the reading' do
@@ -25,11 +25,11 @@ class ReadingTest < ActiveSupport::TestCase
     @r1.approve!
 
     assert @r1.approved?
-    assert Reading.find_by_id(@r1.id).approved?
+    assert Reading.find(@r1.id).approved?
 
     @r1.approve!
 
     assert @r1.approved?
-    assert Reading.find_by_id(@r1.id).approved?
+    assert Reading.find(@r1.id).approved?
   end
 end

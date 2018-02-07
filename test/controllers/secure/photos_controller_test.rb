@@ -143,7 +143,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
       assert_equal false, Photo.all.empty?
     end
 
-    photo_urls = Reading.find_by_id(@r1.id)
+    photo_urls = Reading.find(@r1.id)
                  .photos
                  .map(&:image)
                  .map(&:url)

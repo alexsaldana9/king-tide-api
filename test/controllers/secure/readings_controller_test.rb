@@ -354,8 +354,8 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'keysample'}
 
     assert_response 200
-    assert_not Reading.find_by_id(@r1.id).deleted?
-    assert Reading.find_by_id(@r2.id).deleted?
+    assert_not Reading.find(@r1.id).deleted?
+    assert Reading.find(@r2.id).deleted?
   end
 
   test 'does not delete, when apiKey is invalid' do
