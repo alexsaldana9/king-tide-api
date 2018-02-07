@@ -20,19 +20,19 @@ class Secure::ReadingsController < Secure::ApplicationController
 
     if params[:latitude] != nil or params[:longitude] != nil
       if is_invalid_float_param(:latitude)
-        return input_error(:latitude)
+        return input_error(:latitude, 'invalid value')
       end
 
       if is_invalid_float_param(:longitude)
-        return input_error(:longitude)
+        return input_error(:longitude, 'invalid value')
       end
 
       if not params[:latitude].to_f.between?(-90, 90)
-        return input_error(:latitude)
+        return input_error(:latitude, 'out of range')
       end
 
       if not params[:longitude].to_f.between?(-180, 180)
-        return input_error(:longitude)
+        return input_error(:longitude, 'out of range')
       end
     end
 
