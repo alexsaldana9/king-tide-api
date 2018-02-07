@@ -27,6 +27,7 @@ gem 'puma', '~> 3.7'
 
 gem 'paperclip'
 gem 'aws-sdk', '~> 2.3'
+gem 'paranoia', '~> 2.1', '>= 2.1.5'
 
 
 group :development, :test do

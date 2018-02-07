@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180206174241) do
+ActiveRecord::Schema.define(version: 20180207214645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,9 +36,11 @@ ActiveRecord::Schema.define(version: 20180206174241) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "approved"
-    t.boolean "deleted"
     t.float "latitude"
     t.float "longitude"
+    t.datetime "deleted_at"
+    t.index ["approved"], name: "index_readings_on_approved"
+    t.index ["deleted_at"], name: "index_readings_on_deleted_at"
   end
 
   create_table "secret_keys", force: :cascade do |t|

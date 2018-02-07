@@ -5,7 +5,7 @@ class ReadingsController < ApplicationController
       return input_error(:id)
     end
 
-    reading = Reading.existent.find_by_id(params[:id])
+    reading = Reading.find_by_id(params[:id])
 
     if not reading
       return not_found
@@ -15,7 +15,7 @@ class ReadingsController < ApplicationController
   end
 
   def all
-    render :json => Reading.existent
+    render :json => Reading.all
   end
 
   def approved

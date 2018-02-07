@@ -10,14 +10,14 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     post '/readings/approve', params: { id: @r1.id }
 
     assert_response 401
-    assert_equal [false, false], Reading.all.map(&:approved)
+    assert_equal [false, false], Reading.pluck(:approved)
   end
 
   test 'when key is invalid, record not approved' do
     post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'invalidKEY'}
 
     assert_response 401
-    assert_equal [false, false], Reading.all.map(&:approved)
+    assert_equal [false, false], Reading.pluck(:approved)
   end
 
   test 'approve reading changes its approved status' do
@@ -30,19 +30,19 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'approve reading does not modify deleted records' do
-    @r1.delete!
+    @r1.destroy
 
     post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'keysample'}
 
     assert_response 404
-    assert_equal [false, false], Reading.all.map(&:approved)
+    assert_equal [false, false], Reading.with_deleted.pluck(:approved)
   end
 
   test 'approve Id that does not exists, returns 404' do
     post '/readings/approve', params: { id: -1 }, headers: {'apiKey' => 'keysample'}
 
     assert_response 404
-    assert_equal [false, false], Reading.all.map(&:approved)
+    assert_equal [false, false], Reading.pluck(:approved)
   end
 
   test 'creates reading with all parameters' do
@@ -354,28 +354,28 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'keysample'}
 
     assert_response 200
-    assert_not Reading.find(@r1.id).deleted?
-    assert Reading.find(@r2.id).deleted?
+    assert_not Reading.with_deleted.find(@r1.id).deleted?
+    assert Reading.with_deleted.find(@r2.id).deleted?
   end
 
-  test 'does not delete, when apiKey is invalid' do
+  test 'does not delete when apiKey is invalid' do
     delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'invalidKey'}
 
     assert_response 401
-    assert_equal [false, false], Reading.all.map(&:deleted)
+    assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
   end
 
-  test 'does not delete, when apiKey is not passed' do
+  test 'does not delete when apiKey is not passed' do
     delete '/readings/', params:{ id: @r2.id }
 
     assert_response 401
-    assert_equal [false, false], Reading.all.map(&:deleted)
+    assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
   end
 
-  test 'id that does not exists, returns 404' do
+  test 'id that does not exists returns 404' do
     delete '/readings/', params: { id: -1 }, headers: { 'apiKey' => 'keysample'}
 
     assert_response 404
-    assert_equal [false, false], Reading.all.map(&:deleted)
+    assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
   end
 end

@@ -184,7 +184,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot modify a deleted reading' do
-    @r1.delete!
+    @r1.destroy
 
     post '/photos', params: {
         reading_id: @r1.id,

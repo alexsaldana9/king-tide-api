@@ -7,7 +7,6 @@ one:
   units_salinity: 'ppt'
   description: 'Flood at Vizcaya'
   approved: false
-  deleted: false
 
 two:
   depth: 4.0
@@ -16,4 +15,3 @@ two:
   units_salinity: 'ppt'
   description: 'Flood at Brickell'
   approved: false
-  deleted: false

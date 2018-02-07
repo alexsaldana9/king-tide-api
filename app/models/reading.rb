@@ -1,28 +1,22 @@
 class Reading < ApplicationRecord
+  acts_as_paranoid
 
   has_many :photos, dependent: :destroy
 
-  before_save :configure_status
+  before_save :set_pending_by_default
 
-  scope :existent, -> { where(deleted: false) }
-  scope :approved, -> { existent.where(approved: true) }
-  scope :pending, -> { existent.where(approved: false) }
+  scope :approved, -> { where(approved: true) }
+  scope :pending, -> { where(approved: false) }
 
   def approve!
     self.approved = true
     self.save!
   end
 
-  def delete!
-    self.deleted = true
-    self.save!
-  end
-
   private
 
-  def configure_status
+  def set_pending_by_default
     self.approved = false unless self.approved
-    self.deleted = false unless self.deleted
   end
 end
 

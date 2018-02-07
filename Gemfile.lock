@@ -252,6 +252,8 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
+    paranoia (2.4.0)
+      activerecord (>= 4.0, < 5.2)
     pg (0.21.0)
     puma (3.10.0)
     rack (2.0.3)
@@ -332,6 +334,7 @@ DEPENDENCIES
   fog (~> 1.38)
   listen (>= 3.0.5, < 3.2)
   paperclip
+  paranoia (~> 2.1, >= 2.1.5)
   pg
   puma (~> 3.7)
   rails (~> 5.1.4)

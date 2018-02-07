@@ -27,7 +27,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'returns not found when reading is deleted' do
-    @r1.delete!
+    @r1.destroy
 
     get "/readings/#{@r1.id}", as: :json
 
@@ -39,18 +39,19 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
 
-    readings = Reading.all.each.to_json
+    readings = Reading.all.to_json
     assert_equal readings, response.body
   end
 
   test 'reads all readings excludes deleted readings' do
-    @r1.delete!
+    @r1.destroy
 
     get '/readings/all', as: :json
 
     assert_response 200
 
-    readings = Reading.existent.to_json
+    assert_equal Reading.with_deleted.count - 1, Reading.count
+    readings = Reading.all.to_json
     assert_equal readings, response.body
   end
 
@@ -66,7 +67,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   test 'approved readings do not show deleted' do
     @r1.approve!
     @r2.approve!
-    @r2.delete!
+    @r2.destroy
 
     get '/readings/approved'
 
@@ -84,7 +85,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'pending readings do not show deleted' do
-    @r2.delete!
+    @r2.destroy
 
     get '/readings/pending'
 
