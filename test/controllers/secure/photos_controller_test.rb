@@ -155,8 +155,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot modify an approved reading' do
-    @r1.approved = true
-    @r1.save
+    @r1.approve!
 
     post '/photos', params: {
         reading_id: @r1.id,
@@ -171,8 +170,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot modify a deleted reading' do
-    @r1.deleted = true
-    @r1.save
+    @r1.delete!
 
     post '/photos', params: {
         reading_id: @r1.id,

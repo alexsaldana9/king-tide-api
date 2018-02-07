@@ -30,8 +30,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'approve reading does not modify deleted records' do
-    @r1.deleted = true
-    @r1.save
+    @r1.delete!
 
     post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'keysample'}
 

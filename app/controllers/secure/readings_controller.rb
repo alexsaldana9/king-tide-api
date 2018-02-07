@@ -75,8 +75,7 @@ class Secure::ReadingsController < Secure::ApplicationController
       return not_found('record not found')
     end
 
-    reading.deleted = true
-    reading.save!
+    reading.delete!
 
     return success
   end

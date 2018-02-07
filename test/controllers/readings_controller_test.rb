@@ -16,8 +16,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'reads approved readings' do
-    @r1.approved = true
-    @r1.save
+    @r1.approve!
 
     get '/readings/approved', as: :json
 
@@ -26,12 +25,9 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'approved readings do not show deleted' do
-    @r1.approved = true
-    @r1.save
-
-    @r2.approved = true
-    @r2.deleted = true
-    @r2.save
+    @r1.approve!
+    @r2.approve!
+    @r2.delete!
 
     get '/readings/approved'
 
@@ -40,8 +36,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'reads pending readings' do
-    @r1.approved = true
-    @r1.save
+    @r1.approve!
 
     get '/readings/pending'
 
@@ -50,11 +45,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'pending readings do not show deleted' do
-    @r1.deleted = false
-    @r1.save
-
-    @r2.deleted = true
-    @r2.save
+    @r2.delete!
 
     get '/readings/pending'
 
