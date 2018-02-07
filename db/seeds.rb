@@ -13,9 +13,7 @@ Reading.create(
   units_depth: 'inches',
   salinity: 100,
   units_salinity: 'ppt',
-  description: 'Flood at Vizcaya',
-  approved: false,
-  deleted: false
+  description: 'Flood at Vizcaya'
 )
 
 Reading.create(
@@ -23,7 +21,5 @@ Reading.create(
   units_depth: 'inches',
   salinity: 50,
   units_salinity: 'ppt',
-  description: 'Flood at Brickell',
-  approved: false,
-  deleted: false
+  description: 'Flood at Brickell'
 )

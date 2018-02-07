@@ -36,10 +36,7 @@ class Secure::ReadingsController < Secure::ApplicationController
       end
     end
 
-    full_params = reading_params
-    full_params[:approved] = false
-    full_params[:deleted] = false
-    reading = Reading.create(full_params)
+    reading = Reading.create(reading_params)
 
     logger.info "create; result=success; reading_id=#{reading.id}"
 
