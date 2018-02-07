@@ -18,6 +18,10 @@ class Secure::PhotosController < Secure::ApplicationController
       return input_error(:reading_id, 'not found')
     end
 
+    if reading.deleted
+      return not_found('already deleted')
+    end
+
     if reading.approved
       return input_error(:reading_id, 'approved readings cannot be changed')
     end

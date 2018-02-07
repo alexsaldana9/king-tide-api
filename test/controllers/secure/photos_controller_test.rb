@@ -170,6 +170,22 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, Photo.all.empty?
   end
 
+  test 'cannot modify a deleted reading' do
+    @r1.deleted = true
+    @r1.save
+
+    post '/photos', params: {
+        reading_id: @r1.id,
+        category: 1,
+        image: test_image()
+    }, headers: {
+        'apiKey' => 'keysample'
+    }
+
+    assert_response 404
+    assert_equal true, Photo.all.empty?
+  end
+
   private
 
   def test_image(filename='test_image_1.jpg', content_type='image/jpeg')
