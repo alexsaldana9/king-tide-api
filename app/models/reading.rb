@@ -1,7 +1,6 @@
 class Reading < ApplicationRecord
 
-  has_many :photo
-
+  has_many :photos
 
 end
 
