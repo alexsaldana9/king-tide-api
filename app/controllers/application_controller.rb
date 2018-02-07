@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     return render :json => {error: 'Input error'}, status: 400
   end
 
-  def not_found(message)
+  def not_found(message='record not found')
     logger.info "not_found; reason= #{message}"
     return render :json => {error: 'Not found'}, status: 404
   end

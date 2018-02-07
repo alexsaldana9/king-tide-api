@@ -18,7 +18,7 @@ class Secure::PhotosController < Secure::ApplicationController
 
     reading = Reading.existent.find_by_id(params[:reading_id])
     if not reading
-      return not_found('record not found')
+      return not_found
     end
 
     if reading.approved?

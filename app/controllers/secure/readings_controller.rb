@@ -52,7 +52,7 @@ class Secure::ReadingsController < Secure::ApplicationController
     reading = Reading.existent.find_by_id(params[:id])
 
     if not reading
-      return not_found('record not found')
+      return not_found
     end
 
     reading.update!(approved: true)
@@ -68,7 +68,7 @@ class Secure::ReadingsController < Secure::ApplicationController
     reading = Reading.existent.find_by_id(params[:id])
 
     if not reading
-      return not_found('record not found')
+      return not_found
     end
 
     reading.delete!
