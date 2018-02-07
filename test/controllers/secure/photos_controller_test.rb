@@ -154,6 +154,20 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'uploads a photo with a float category' do
+    post '/photos', params: {
+        reading_id: @r1.id,
+        category: 1.5,
+        image: test_image()
+    }, headers: {
+        'apiKey' => 'keysample'
+    }
+
+    assert_response 200
+    assert_equal 1, Photo.count
+    assert_equal 1, Photo.first.category
+  end
+
   test 'cannot modify an approved reading' do
     @r1.approve!
 
