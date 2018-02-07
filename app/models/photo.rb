@@ -1,4 +1,6 @@
 class Photo < ApplicationRecord
+  acts_as_paranoid
+
   belongs_to :reading
 
   class Category
