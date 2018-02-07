@@ -49,14 +49,10 @@ class Secure::ReadingsController < Secure::ApplicationController
   def approve
     logger.info "approve; params=#{params}"
 
-    reading = Reading.find_by_id(params[:id])
+    reading = Reading.existent.find_by_id(params[:id])
 
     if not reading
       return not_found('record not found')
-    end
-
-    if reading.deleted?
-      return not_found('already deleted')
     end
 
     reading.update!(approved: true)
@@ -69,7 +65,7 @@ class Secure::ReadingsController < Secure::ApplicationController
   def delete
     logger.info "delete; params=#{params}"
 
-    reading = Reading.find_by_id(params[:id])
+    reading = Reading.existent.find_by_id(params[:id])
 
     if not reading
       return not_found('record not found')

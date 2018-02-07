@@ -11,12 +11,12 @@ class ReadingsController < ApplicationController
   end
 
   def approved
-    readings = Reading.where(deleted: false, approved: true)
+    readings = Reading.existent.where(approved: true)
     render :json => readings
   end
 
   def pending
-    readings = Reading.where(deleted: false, approved: false)
+    readings = Reading.existent.where(approved: false)
     render :json => readings
   end
 

@@ -16,13 +16,9 @@ class Secure::PhotosController < Secure::ApplicationController
       return input_error(:reading_id, 'invalid value')
     end
 
-    reading = Reading.find_by_id(params[:reading_id])
+    reading = Reading.existent.find_by_id(params[:reading_id])
     if not reading
-      return input_error(:reading_id, 'not found')
-    end
-
-    if reading.deleted?
-      return not_found('already deleted')
+      return not_found('record not found')
     end
 
     if reading.approved?

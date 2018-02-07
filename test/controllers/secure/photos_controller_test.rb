@@ -99,7 +99,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         'apiKey' => 'keysample'
     }
 
-    assert_response 400
+    assert_response 404
     assert_equal true, Photo.all.empty?
   end
 

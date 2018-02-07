@@ -2,6 +2,8 @@ class Reading < ApplicationRecord
 
   has_many :photos
 
+  scope :existent, -> { where(deleted: false) }
+
   def approve!
     self.approved = true
     self.save!
