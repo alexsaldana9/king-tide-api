@@ -43,6 +43,17 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal readings, response.body
   end
 
+  test 'reads all readings excludes deleted readings' do
+    @r1.delete!
+
+    get '/readings/all', as: :json
+
+    assert_response 200
+
+    readings = Reading.existent.to_json
+    assert_equal readings, response.body
+  end
+
   test 'reads approved readings' do
     @r1.approve!
 

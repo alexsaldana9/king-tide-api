@@ -15,7 +15,7 @@ class ReadingsController < ApplicationController
   end
 
   def all
-    readings = Reading.all.each
+    readings = Reading.existent
     render :json => readings
   end
 
