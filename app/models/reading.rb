@@ -4,12 +4,12 @@ class Reading < ApplicationRecord
 
   def approve!
     self.approved = true
-    save!
+    self.save!
   end
 
   def delete!
     self.deleted = true
-    save!
+    self.save!
   end
 end
 
