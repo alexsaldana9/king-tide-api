@@ -8,7 +8,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   test 'when key is not passed, photo is not created' do
     post '/photos', params: {
         reading_id: @r1.id,
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }
 
@@ -19,7 +19,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   test 'when key is invalid, photo not created' do
     post '/photos', params: {
         reading_id: @r1.id,
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {'apiKey' => 'invalidKEY'}
 
@@ -67,7 +67,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
 
   test 'does not create photo when reading_id is missing' do
     post '/photos', params: {
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
         'apiKey' => 'keysample'
@@ -80,7 +80,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   test 'does not create photo when reading_id is invalid' do
     post '/photos', params: {
         reading_id: 'invalid',
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
         'apiKey' => 'keysample'
@@ -93,7 +93,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   test 'does not create photo when reading_id is not in the db' do
     post '/photos', params: {
         reading_id: -1,
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
         'apiKey' => 'keysample'
@@ -106,7 +106,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   test 'does not create photo when image is missing' do
     post '/photos', params: {
         reading_id: @r1.id,
-        category: 1
+        category: Photo::Category::DEPTH
     }, headers: {
         'apiKey' => 'keysample'
     }
@@ -118,7 +118,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   test 'does not create photo when image parameter is not a valid image' do
     post '/photos', params: {
         reading_id: @r1.id,
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image('not_a_photo.txt', 'text/plain')
     }, headers: {
         'apiKey' => 'keysample'
@@ -133,7 +133,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
     seeded_filenames.each do |img|
       post '/photos', params: {
           reading_id: @r1.id,
-          category: 1,
+          category: Photo::Category::DEPTH,
           image: test_image(img)
       }, headers: {
           'apiKey' => 'keysample'
@@ -159,7 +159,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
 
     post '/photos', params: {
         reading_id: @r1.id,
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
         'apiKey' => 'keysample'
@@ -174,7 +174,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
 
     post '/photos', params: {
         reading_id: @r1.id,
-        category: 1,
+        category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
         'apiKey' => 'keysample'

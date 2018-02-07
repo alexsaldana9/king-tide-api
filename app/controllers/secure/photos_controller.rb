@@ -4,9 +4,12 @@ class Secure::PhotosController < Secure::ApplicationController
       return input_error(:image)
     end
 
-    # 1-depth, 2-salinity, 3-location, 4-other
-    if not params[:category].to_f.between?(1, 4)
-      return input_error(:category)
+    if is_invalid_float_param(:category)
+      return input_error(:category, 'invalid value')
+    end
+
+    if not Photo::Category.is_valid(params[:category].to_i)
+      return input_error(:category, 'out of range')
     end
 
     if is_invalid_float_param(:reading_id)
