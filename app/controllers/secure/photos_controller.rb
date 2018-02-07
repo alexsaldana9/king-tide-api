@@ -1,6 +1,6 @@
 class Secure::PhotosController < Secure::ApplicationController
   def create
-    if params[:image] == nil
+    if not params[:image]
       return input_error(:image)
     end
 

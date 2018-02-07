@@ -40,7 +40,7 @@ class ApplicationController < ActionController::API
   end
 
   def is_valid_string_param(param_name)
-    if params[param_name] == nil
+    if not params[param_name]
       return false
     end
     params[param_name].empty? == false

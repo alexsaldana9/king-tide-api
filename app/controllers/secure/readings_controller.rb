@@ -51,11 +51,11 @@ class Secure::ReadingsController < Secure::ApplicationController
 
     reading = Reading.find_by(id: params[:id])
 
-    if reading == nil
+    if not reading
       return not_found('record not found')
     end
 
-    if reading.deleted == true
+    if reading.deleted
       return not_found('already deleted')
     end
 
@@ -71,7 +71,7 @@ class Secure::ReadingsController < Secure::ApplicationController
 
     reading = Reading.find_by(id: params[:id])
 
-    if reading == nil
+    if not reading
       return not_found('record not found')
     end
 
