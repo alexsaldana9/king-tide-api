@@ -1,6 +1,6 @@
 class Secure::ReadingsController < Secure::ApplicationController
   def create
-    p "create; params=#{params}"
+    logger.info "create; params=#{params}"
 
     if is_invalid_float_param(:depth)
       return input_error(:depth)
@@ -41,13 +41,13 @@ class Secure::ReadingsController < Secure::ApplicationController
     full_params[:deleted] = false
     reading = Reading.create(full_params)
 
-    p "create; result=success; reading_id=#{reading.id}"
+    logger.info "create; result=success; reading_id=#{reading.id}"
 
     render :json => reading
   end
 
   def approve
-    p "approve; params=#{params}"
+    logger.info "approve; params=#{params}"
 
     reading = Reading.find_by(id: params[:id])
 
@@ -61,13 +61,13 @@ class Secure::ReadingsController < Secure::ApplicationController
 
     reading.update!(approved: true)
 
-    p "approve; result=success; reading_id=#{reading.id};"
+    logger.info "approve; result=success; reading_id=#{reading.id};"
 
     return success
   end
 
   def delete
-    p "delete; params=#{params}"
+    logger.info "delete; params=#{params}"
 
     reading = Reading.find_by(id: params[:id])
 

@@ -34,7 +34,7 @@ class Secure::PhotosController < Secure::ApplicationController
       return client_error 'Photo not saved'
     end
 
-    p "create; result=success; photo_id=#{photo.id}, reading_id=#{reading.id}"
+    logger.info "create; result=success; photo_id=#{photo.id}, reading_id=#{reading.id}"
     return success
   end
 
