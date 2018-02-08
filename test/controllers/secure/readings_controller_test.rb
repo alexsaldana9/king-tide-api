@@ -4,6 +4,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @r1 = readings(:one)
     @r2 = readings(:two)
+    @key = create(:secret_key).key
   end
 
   test 'when key is not passed, record not approved' do
@@ -21,7 +22,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'approve reading changes its approved status' do
-    post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'keysample'}
+    post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
 
     assert_response 200
     assert_equal 2, Reading.count
@@ -32,14 +33,14 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   test 'approve reading does not modify deleted records' do
     @r1.destroy
 
-    post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'keysample'}
+    post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
 
     assert_response 404
     assert_equal [false, false], Reading.with_deleted.pluck(:approved)
   end
 
   test 'approve Id that does not exists, returns 404' do
-    post '/readings/approve', params: { id: -1 }, headers: {'apiKey' => 'keysample'}
+    post '/readings/approve', params: { id: -1 }, headers: {'apiKey' => @key}
 
     assert_response 404
     assert_equal [false, false], Reading.pluck(:approved)
@@ -55,7 +56,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: 25.7548106,
         longitude: -80.3793627
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 200
@@ -79,7 +80,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_depth: 'feet',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 200
@@ -121,7 +122,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_salinity: 'ppm',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -136,7 +137,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_salinity: 'ppm',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -151,7 +152,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_salinity: 'ppm',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -165,7 +166,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_salinity: 'ppm',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -180,7 +181,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_salinity: 'ppm',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -194,7 +195,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         salinity: 23,
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -211,7 +212,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: "foo",
         longitude: 160
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -227,7 +228,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         description: 'sample description',
         longitude: 160
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -244,7 +245,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: 140,
         longitude: 160
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -261,7 +262,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: -140,
         longitude: 160
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -276,7 +277,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         units_salinity: 'ppm',
         description: 'sample description'
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 200
@@ -293,7 +294,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: 45,
         longitude: "bar"
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -309,7 +310,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         description: 'sample description',
         latitude: 45
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -326,7 +327,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: 45,
         longitude: 200
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -343,7 +344,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
         latitude: 45,
         longitude: -200
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -351,7 +352,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'delete r2' do
-    delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'keysample'}
+    delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => @key}
 
     assert_response 200
     assert_not Reading.with_deleted.find(@r1.id).deleted?
@@ -373,7 +374,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'id that does not exists returns 404' do
-    delete '/readings/', params: { id: -1 }, headers: { 'apiKey' => 'keysample'}
+    delete '/readings/', params: { id: -1 }, headers: { 'apiKey' => @key}
 
     assert_response 404
     assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
