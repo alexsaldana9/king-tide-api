@@ -3,6 +3,7 @@ require 'test_helper'
 class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   setup do
     @r1 = readings(:one)
+    @key = create(:secret_key).key
   end
 
   test 'when key is not passed, photo is not created' do
@@ -31,7 +32,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
     post '/photos', params: {
         reading_id: @r1.id,
         image: test_image()
-    }, headers: {'apiKey' => 'keysample'}
+    }, headers: {'apiKey' => @key}
 
     assert_response 400
     assert_equal true, Photo.all.empty?
@@ -43,7 +44,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: 'invalid',
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -57,7 +58,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
           category: category,
           image: test_image()
       }, headers: {
-          'apiKey' => 'keysample'
+          'apiKey' => @key
       }
 
       assert_response 400
@@ -70,7 +71,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -83,7 +84,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -96,7 +97,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 404
@@ -108,7 +109,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         reading_id: @r1.id,
         category: Photo::Category::DEPTH
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -121,7 +122,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: Photo::Category::DEPTH,
         image: test_image('not_a_photo.txt', 'text/plain')
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -136,7 +137,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
           category: Photo::Category::DEPTH,
           image: test_image(img)
       }, headers: {
-          'apiKey' => 'keysample'
+          'apiKey' => @key
       }
 
       assert_response 200
@@ -144,9 +145,9 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
     end
 
     photo_urls = Reading.find(@r1.id)
-                 .photos
-                 .map(&:image)
-                 .map(&:url)
+                     .photos
+                     .map(&:image)
+                     .map(&:url)
     assert_equal seeded_filenames.count, photo_urls.count
 
     seeded_filenames.each do |f|
@@ -160,7 +161,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: 1.5,
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 200
@@ -176,7 +177,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 400
@@ -191,7 +192,7 @@ class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
         category: Photo::Category::DEPTH,
         image: test_image()
     }, headers: {
-        'apiKey' => 'keysample'
+        'apiKey' => @key
     }
 
     assert_response 404
