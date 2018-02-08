@@ -6,4 +6,8 @@ module FactoryBot
   def FactoryBot.random_float(min=0.0, max=1000.0)
     (rand * (max - min)) + min
   end
+
+  def FactoryBot.random_int(min=0, max=1000)
+    rand(max - min) + min
+  end
 end
