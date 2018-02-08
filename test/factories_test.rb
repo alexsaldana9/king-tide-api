@@ -26,4 +26,17 @@ class FactoriesTest < ActiveSupport::TestCase
 
     assert_equal SecretKey.count, SecretKey.pluck(:key).uniq.count
   end
+
+  test 'creates different readings every time' do
+    (1..100).each { create(:reading) }
+
+    assert_in_delta Reading.count, Reading.pluck(:depth).uniq.count, 10
+    assert Reading.pluck(:units_depth).all? {|x| x == 'inches'}
+
+    assert_in_delta Reading.count, Reading.pluck(:salinity).uniq.count, 10
+    assert Reading.pluck(:units_salinity).all? {|x| x == 'ppt'}
+
+    assert_equal Reading.count, Reading.pluck(:description).uniq.count
+    assert Reading.pluck(:approved).all? {|x| x == false}
+  end
 end
