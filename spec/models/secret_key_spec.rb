@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: secret_keys
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  name       :string
+#  key        :string
+#
+
 require 'rails_helper'
 
 RSpec.describe SecretKey, type: :model do

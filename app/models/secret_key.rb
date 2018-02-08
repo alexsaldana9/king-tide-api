@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: secret_keys
+#
+#  id         :integer          not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  name       :string
+#  key        :string
+#
+
 class SecretKey < ApplicationRecord
   def self.is_valid(secret)
     return false if not secret

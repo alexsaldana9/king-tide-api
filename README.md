@@ -4,13 +4,13 @@
 
 
 
-## Dependencies  
+## Dependencies    
 
     - Ruby version - ruby 2.5.0
     - postgres 
     - sqlite
 
-## How to run the app  
+## How to run the app    
 
 ```bash
 $ rails s
@@ -26,7 +26,7 @@ $ rails db:seed
 ```
 
 
-## How to run migrations in heroku
+## How to run migrations in heroku  
 
 log into heroku, and run the command below in the online heroku console
 
@@ -34,19 +34,19 @@ log into heroku, and run the command below in the online heroku console
 $ rails db:migrate
 ```
 
-## Add a secret key to heroku
+## Add a secret key to heroku  
 
 ```bash
 $ rails runner "SecretKey.create(name: 'KEY_NAME', key: 'SECRET KEY')"
 ```
     
-## Delete a secret key from heroku
+## Delete a secret key from heroku    
 
 ```bash
-rails runner "SecretKey.where(name: 'KEY_NAME').destroy_all"
+$ rails runner "SecretKey.where(name: 'KEY_NAME').destroy_all"
 ```
 
-## How to run the tests
+## How to run the tests  
 
 ```bash
 $ rails spec
@@ -59,7 +59,15 @@ $ RAILS_ENV=test rails db:create
 $ RAILS_ENV=test rails db:migrate
 ```
 
-## Deployment instructions 
+## Annotate the models  
+
+```bash
+$ bundle exec rake annotate_models
+```
+
+[What is annotate?](https://github.com/ctran/annotate_models)  
+
+## Deployment instructions  
 
 ```bash
 $ git push origin master
