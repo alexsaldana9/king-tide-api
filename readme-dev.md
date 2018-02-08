@@ -65,9 +65,9 @@ curl -s -X DELETE \
 ```bash
 curl -s -X POST \
   -H 'apiKey:dev_secret' \
-  -F 'reading_id=7' \
+  -F 'reading_id=3' \
   -F 'category=1' \
-  -F 'image=@./test/fixtures/files/test_image_1.jpg' \
+  -F 'image=@./spec/fixtures/files/test_image_1.jpg' \
   http://localhost:3001/photos | json_pp
 ```
 

@@ -49,7 +49,7 @@ rails runner "SecretKey.where(name: 'KEY_NAME').destroy_all"
 ## How to run the tests
 
 ```bash
-$ rails t
+$ rails spec
 ```
 When the database changes, you need to change the Test database.
 
