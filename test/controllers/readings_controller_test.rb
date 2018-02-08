@@ -2,8 +2,8 @@ require 'test_helper'
 
 class ReadingsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @r1 = readings(:one)
-    @r2 = readings(:two)
+    @r1 = create(:reading)
+    @r2 = create(:reading)
   end
 
   test 'returns the reading details' do
@@ -39,8 +39,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 200
 
-    readings = Reading.all.to_json
-    assert_equal readings, response.body
+    assert_equal Reading.all.to_json, response.body
   end
 
   test 'reads all readings excludes deleted readings' do
@@ -51,8 +50,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     assert_equal Reading.with_deleted.count - 1, Reading.count
-    readings = Reading.all.to_json
-    assert_equal readings, response.body
+    assert_equal Reading.all.to_json, response.body
   end
 
   test 'reads approved readings' do
@@ -81,7 +79,8 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
     get '/readings/pending'
 
     assert_response 200
-    assert_equal JSON.parse([@r2].each.to_json), JSON.parse(response.body)
+    assert_equal Reading.pending.to_json, response.body
+    assert_not JSON.parse(response.body).any? {|r| r['id'] == @r1.id}
   end
 
   test 'pending readings do not show deleted' do
@@ -90,6 +89,7 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
     get '/readings/pending'
 
     assert_response 200
-    assert_equal JSON.parse([@r1].each.to_json), JSON.parse(response.body)
+    assert_equal Reading.pending.to_json, response.body
+    assert_not JSON.parse(response.body).any? {|r| r['id'] == @r2.id}
   end
 end

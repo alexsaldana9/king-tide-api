@@ -2,48 +2,57 @@ require 'test_helper'
 
 class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @r1 = readings(:one)
-    @r2 = readings(:two)
+    @r1 = create(:reading)
+    @r2 = create(:reading)
+
     @key = create(:secret_key).key
+    @reading_count_before_test = Reading.count
   end
 
   test 'when key is not passed, record not approved' do
+    approved_before_test = Reading.with_deleted.pluck(:approved)
+
     post '/readings/approve', params: { id: @r1.id }
 
     assert_response 401
-    assert_equal [false, false], Reading.pluck(:approved)
+    assert_equal approved_before_test, Reading.pluck(:approved)
   end
 
   test 'when key is invalid, record not approved' do
+    approved_before_test = Reading.with_deleted.pluck(:approved)
+
     post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'invalidKEY'}
 
     assert_response 401
-    assert_equal [false, false], Reading.pluck(:approved)
+    assert_equal approved_before_test, Reading.pluck(:approved)
   end
 
   test 'approve reading changes its approved status' do
     post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
 
     assert_response 200
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
     assert Reading.find(@r1.id).approved?
     assert_not Reading.find(@r2.id).approved?
   end
 
   test 'approve reading does not modify deleted records' do
     @r1.destroy
+    approved_before_test = Reading.with_deleted.pluck(:approved)
 
     post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
 
     assert_response 404
-    assert_equal [false, false], Reading.with_deleted.pluck(:approved)
+    assert_equal approved_before_test, Reading.with_deleted.pluck(:approved)
   end
 
   test 'approve Id that does not exists, returns 404' do
+    approved_before_test = Reading.pluck(:approved)
+
     post '/readings/approve', params: { id: -1 }, headers: {'apiKey' => @key}
 
     assert_response 404
-    assert_equal [false, false], Reading.pluck(:approved)
+    assert_equal approved_before_test, Reading.pluck(:approved)
   end
 
   test 'creates reading with all parameters' do
@@ -60,7 +69,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 200
-    assert_equal 3, Reading.count
+    assert_equal @reading_count_before_test + 1, Reading.count
 
     created_reading = Reading.last
     assert_equal 3, created_reading.depth
@@ -84,7 +93,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 200
-    assert_equal 3, Reading.count
+    assert_equal @reading_count_before_test + 1, Reading.count
   end
 
   test 'does not create reading when no apiKey is passed' do
@@ -97,7 +106,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 401
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'does not create reading when apiKey is not valid' do
@@ -112,7 +121,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 401
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'missing depth param fails' do
@@ -126,7 +135,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid depth parameter fails' do
@@ -141,7 +150,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid units_depth parameter fails' do
@@ -156,7 +165,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'missing units_depth parameter fails' do
@@ -170,7 +179,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid salinity will fail' do
@@ -185,7 +194,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'Missing units_salinity parameter fails, when salinity parameter is passed' do
@@ -199,7 +208,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid latitude will fail' do
@@ -216,7 +225,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'missing latitude will fail' do
@@ -232,7 +241,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid latitude will fail, over positive side of range(-90 , 90) ex:140' do
@@ -249,7 +258,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid latitude will fail, over negative side of range(-90 , 90) ex:-140' do
@@ -266,7 +275,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'Missing latitude and longitude, reading will be saved' do
@@ -281,7 +290,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 200
-    assert_equal 3, Reading.count
+    assert_equal @reading_count_before_test + 1, Reading.count
   end
 
   test 'invalid longitude will fail' do
@@ -298,7 +307,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'Missing longitude will fail' do
@@ -314,7 +323,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid longitude will fail, over positive side of range(-180 , 180) ex:200' do
@@ -331,7 +340,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'invalid longitude will fail, over negative side of range(-180 , 180) ex:-200' do
@@ -348,7 +357,7 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response 400
-    assert_equal 2, Reading.count
+    assert_equal @reading_count_before_test, Reading.count
   end
 
   test 'delete r2' do
@@ -360,23 +369,29 @@ class Secure::ReadingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'does not delete when apiKey is invalid' do
+    deleted_before_test = Reading.with_deleted.map(&:deleted?)
+
     delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'invalidKey'}
 
     assert_response 401
-    assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
+    assert_equal deleted_before_test, Reading.with_deleted.map(&:deleted?)
   end
 
   test 'does not delete when apiKey is not passed' do
+    deleted_before_test = Reading.with_deleted.map(&:deleted?)
+
     delete '/readings/', params:{ id: @r2.id }
 
     assert_response 401
-    assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
+    assert_equal deleted_before_test, Reading.with_deleted.map(&:deleted?)
   end
 
-  test 'id that does not exists returns 404' do
+  test 'delete id that does not exists returns 404' do
+    deleted_before_test = Reading.with_deleted.map(&:deleted?)
+
     delete '/readings/', params: { id: -1 }, headers: { 'apiKey' => @key}
 
     assert_response 404
-    assert_equal [false, false], Reading.with_deleted.map(&:deleted?)
+    assert_equal deleted_before_test, Reading.with_deleted.map(&:deleted?)
   end
 end

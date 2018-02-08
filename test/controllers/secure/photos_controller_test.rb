@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Secure::PhotosControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @r1 = readings(:one)
+    @r1 = create(:reading)
     @key = create(:secret_key).key
   end
 

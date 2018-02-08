@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ReadingTest < ActiveSupport::TestCase
   def setup
-    @r1 = readings(:one)
+    @r1 = (1...10).map { create(:reading) }.first
   end
 
   test 'soft deletes the reading' do
