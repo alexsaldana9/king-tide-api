@@ -16,9 +16,6 @@ class SecretKeyTest < ActiveSupport::TestCase
   end
 
   test 'is_valid returns true for valid keys' do
-    assert SecretKey.is_valid('keysample')
-    assert SecretKey.is_valid('another key')
-
     @keys.each do |k|
       assert SecretKey.is_valid(k)
     end
