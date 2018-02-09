@@ -6,73 +6,69 @@ RSpec.describe Secure::ReadingsController, type: :request do
     @r2 = create(:reading)
 
     @key = create(:secret_key).key
-    @reading_count_before_test = Reading.count
   end
 
   describe 'approve' do
     it 'when key is not passed, record not approved' do
-      approved_before_test = Reading.with_deleted.pluck(:approved)
+      expect {
+        post '/readings/approve', params: { id: @r1.id }
 
-      post '/readings/approve', params: { id: @r1.id }
-
-      expect(response.status).to eq(401)
-      expect(Reading.pluck(:approved)).to eq(approved_before_test)
+        expect(response.status).to eq(401)
+      }.not_to change { Reading.with_deleted.pluck(:approved) }
     end
 
     it 'when key is invalid, record not approved' do
-      approved_before_test = Reading.with_deleted.pluck(:approved)
+      expect {
+        post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'invalidKEY'}
 
-      post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => 'invalidKEY'}
-
-      expect(response.status).to eq(401)
-      expect(Reading.pluck(:approved)).to eq(approved_before_test)
+        expect(response.status).to eq(401)
+      }.not_to change { Reading.with_deleted.pluck(:approved) }
     end
 
     it 'approve reading changes its approved status' do
-      post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
+      expect {
+        post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
 
-      expect(response.status).to eq(200)
-      expect(Reading.count).to eq(@reading_count_before_test)
-      expect(Reading.find(@r1.id).approved?).to eq(true)
-      expect(Reading.find(@r2.id).approved?).not_to eq(true)
+        expect(response.status).to eq(200)
+      }.to change { Reading.count }.by(0)
+       .and change { Reading.approved.count }.by(1)
+       .and change { @r1.reload.approved? }.to(true)
     end
 
     it 'approve reading does not modify deleted records' do
       @r1.destroy
-      approved_before_test = Reading.with_deleted.pluck(:approved)
 
-      post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
+      expect {
+        post '/readings/approve', params: { id: @r1.id }, headers: {'apiKey' => @key}
 
-      expect(response.status).to eq(404)
-      expect(Reading.with_deleted.pluck(:approved)).to eq(approved_before_test)
+        expect(response.status).to eq(404)
+      }.not_to change { Reading.with_deleted.pluck(:approved) }
     end
 
     it 'approve Id that does not exists, returns 404' do
-      approved_before_test = Reading.pluck(:approved)
+      expect {
+        post '/readings/approve', params: { id: -1 }, headers: {'apiKey' => @key}
 
-      post '/readings/approve', params: { id: -1 }, headers: {'apiKey' => @key}
-
-      expect(response.status).to eq(404)
-      expect(Reading.pluck(:approved)).to eq(approved_before_test)
+        expect(response.status).to eq(404)
+      }.not_to change { Reading.with_deleted.pluck(:approved) }
     end
   end
 
   describe 'create' do
     it 'creates reading with all parameters' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'FIU Nature Preserve - location- sample',
-          latitude: 25.7548106,
-          longitude: -80.3793627
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'FIU Nature Preserve - location- sample',
+            latitude: 25.7548106,
+            longitude: -80.3793627
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(200)
-      expect(Reading.count).to eq(@reading_count_before_test + 1)
+        expect(response.status).to eq(200)
+      }.to change { Reading.count }.by(1)
 
       created_reading = Reading.last
       expect(created_reading.depth).to eq(3)
@@ -87,267 +83,253 @@ RSpec.describe Secure::ReadingsController, type: :request do
     end
 
     it 'can create reading with no salinity' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            description: 'sample description'
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(200)
-      expect(Reading.count).to eq(@reading_count_before_test + 1)
+        expect(response.status).to eq(200)
+      }.to change { Reading.count }.by(1)
     end
 
     it 'does not create reading when no apiKey is passed' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'inches',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description'
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'inches',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description'
+        }
 
-      expect(response.status).to eq(401)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(401)
+      }.not_to change { Reading.count }
     end
 
     it 'does not create reading when apiKey is not valid' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'inches',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description'
-      }, headers: {
-          'apiKey' => 'wrongkey'
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'inches',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description'
+        }, headers: { 'apiKey' => 'wrongkey' }
 
-      expect(response.status).to eq(401)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(401)
+      }.not_to change { Reading.count }
     end
 
     it 'missing depth param fails' do
-      post '/readings/', params: {
+      expect {
+        post '/readings/', params: {
           units_depth: 'inches',
           salinity: 30,
           units_salinity: 'ppm',
           description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid depth parameter fails' do
-      post '/readings/', params: {
-          depth: 'alex',
-          units_depth: 'inches',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 'alex',
+            units_depth: 'inches',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description'
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid units_depth parameter fails' do
-      post '/readings/', params: {
-          depth: 2.23,
-          units_depth: "",
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 2.23,
+            units_depth: "",
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description'
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'missing units_depth parameter fails' do
-      post '/readings/', params: {
+      expect {
+        post '/readings/', params: {
           depth: 2.23,
           salinity: 30,
           units_salinity: 'ppm',
           description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid salinity will fail' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 'text',
-          units_salinity: 'ppm',
-          description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 'text',
+            units_salinity: 'ppm',
+            description: 'sample description'
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'Missing units_salinity parameter fails, when salinity parameter is passed' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 23,
-          description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 23,
+            description: 'sample description'
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid latitude will fail' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description',
-          latitude: "foo",
-          longitude: 160
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description',
+            latitude: "foo",
+            longitude: 160
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'missing latitude will fail' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description',
-          longitude: 160
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description',
+            longitude: 160
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid latitude will fail, over positive side of range(-90 , 90) ex:140' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description',
-          latitude: 140,
-          longitude: 160
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description',
+            latitude: 140,
+            longitude: 160
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid latitude will fail, over negative side of range(-90 , 90) ex:-140' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description',
-          latitude: -140,
-          longitude: 160
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description',
+            latitude: -140,
+            longitude: 160
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'Missing latitude and longitude, reading will be saved' do
-      post '/readings/', params: {
+      expect {
+        post '/readings/', params: {
           depth: 3,
           units_depth: 'feet',
           salinity: 30,
           units_salinity: 'ppm',
           description: 'sample description'
-      }, headers: {
-          'apiKey' => @key
-      }
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(200)
-      expect(Reading.count).to eq(@reading_count_before_test + 1)
+        expect(response.status).to eq(200)
+      }.to change { Reading.count }.by(1)
     end
 
     it 'invalid longitude will fail' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description',
-          latitude: 45,
-          longitude: "bar"
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description',
+            latitude: 45,
+            longitude: "bar"
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'Missing longitude will fail' do
-      post '/readings/', params: {
+      expect {
+        post '/readings/', params: {
           depth: 3,
           units_depth: 'feet',
           salinity: 30,
           units_salinity: 'ppm',
           description: 'sample description',
           latitude: 45
-      }, headers: {
-          'apiKey' => @key
-      }
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid longitude will fail, over positive side of range(-180 , 180) ex:200' do
-      post '/readings/', params: {
-          depth: 3,
-          units_depth: 'feet',
-          salinity: 30,
-          units_salinity: 'ppm',
-          description: 'sample description',
-          latitude: 45,
-          longitude: 200
-      }, headers: {
-          'apiKey' => @key
-      }
+      expect {
+        post '/readings/', params: {
+            depth: 3,
+            units_depth: 'feet',
+            salinity: 30,
+            units_salinity: 'ppm',
+            description: 'sample description',
+            latitude: 45,
+            longitude: 200
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
 
     it 'invalid longitude will fail, over negative side of range(-180 , 180) ex:-200' do
-      post '/readings/', params: {
+      expect {
+        post '/readings/', params: {
           depth: 3,
           units_depth: 'feet',
           salinity: 30,
@@ -355,49 +337,53 @@ RSpec.describe Secure::ReadingsController, type: :request do
           description: 'sample description',
           latitude: 45,
           longitude: -200
-      }, headers: {
-          'apiKey' => @key
-      }
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(400)
-      expect(Reading.count).to eq(@reading_count_before_test)
+        expect(response.status).to eq(400)
+      }.not_to change { Reading.count }
     end
   end
 
   describe 'delete' do
     it 'delete r2' do
-      delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => @key }
+      expect {
+        delete '/readings/', params: {
+            id: @r2.id
+        }, headers: { 'apiKey' => @key }
 
-      expect(response.status).to eq(200)
-      expect(Reading.with_deleted.find(@r1.id).deleted?).not_to eq(true)
-      expect(Reading.with_deleted.find(@r2.id).deleted?).to eq(true)
+        expect(response.status).to eq(200)
+      }.to change { Reading.with_deleted.count(&:deleted?) }.by(1)
+       .and change { @r2.reload.deleted? }.to(true)
     end
 
     it 'does not delete when apiKey is invalid' do
-      deleted_before_test = Reading.with_deleted.map(&:deleted?)
+      expect {
+        delete '/readings/', params: {
+            id: @r2.id
+        }, headers: { 'apiKey' => 'invalidKey' }
 
-      delete '/readings/', params:{ id: @r2.id }, headers: { 'apiKey' => 'invalidKey' }
-
-      expect(response.status).to eq(401)
-      expect(Reading.with_deleted.map(&:deleted?)).to eq(deleted_before_test)
+        expect(response.status).to eq(401)
+      }.not_to change { Reading.with_deleted.map(&:deleted?) }
     end
 
     it 'does not delete when apiKey is not passed' do
-      deleted_before_test = Reading.with_deleted.map(&:deleted?)
+      expect {
+        delete '/readings/', params:{
+            id: @r2.id
+        }
 
-      delete '/readings/', params:{ id: @r2.id }
-
-      expect(response.status).to eq(401)
-      expect(Reading.with_deleted.map(&:deleted?)).to eq(deleted_before_test)
+        expect(response.status).to eq(401)
+      }.not_to change { Reading.with_deleted.map(&:deleted?) }
     end
 
     it 'delete id that does not exists returns 404' do
-      deleted_before_test = Reading.with_deleted.map(&:deleted?)
+      expect {
+        delete '/readings/', params: {
+            id: -1
+        }, headers: { 'apiKey' => @key }
 
-      delete '/readings/', params: { id: -1 }, headers: { 'apiKey' => @key }
-
-      expect(response.status).to eq(404)
-      expect(Reading.with_deleted.map(&:deleted?)).to eq(deleted_before_test)
+        expect(response.status).to eq(404)
+      }.not_to change { Reading.with_deleted.map(&:deleted?) }
     end
   end
 end

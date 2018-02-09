@@ -38,7 +38,7 @@ RSpec.describe ReadingsController, type: :request do
 
   describe 'all' do
     it 'reads all readings' do
-      get '/readings/all', as: :json
+      get '/readings/all'
 
       expect(response.status).to eq(200)
 
@@ -48,7 +48,7 @@ RSpec.describe ReadingsController, type: :request do
     it 'reads all readings excludes deleted readings' do
       @r1.destroy
 
-      get '/readings/all', as: :json
+      get '/readings/all'
 
       expect(response.status).to eq(200)
 
@@ -64,7 +64,7 @@ RSpec.describe ReadingsController, type: :request do
       get '/readings/approved'
 
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq(JSON.parse([@r1].each.to_json))
+      expect(json_response).to eq(JSON.parse([@r1].each.to_json))
     end
 
     it 'approved readings do not show deleted' do
@@ -75,7 +75,7 @@ RSpec.describe ReadingsController, type: :request do
       get '/readings/approved'
 
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq(JSON.parse([@r1].each.to_json))
+      expect(json_response).to eq(JSON.parse([@r1].each.to_json))
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe ReadingsController, type: :request do
 
       expect(response.status).to eq(200)
       expect(response.body).to eq(Reading.pending.to_json)
-      expect(JSON.parse(response.body).any? {|r| r['id'] == @r1.id}).not_to eq(true)
+      expect(json_response).not_to include {|r| r['id'] == @r1.id}
     end
 
     it 'pending readings do not show deleted' do
@@ -97,7 +97,13 @@ RSpec.describe ReadingsController, type: :request do
 
       expect(response.status).to eq(200)
       expect(response.body).to eq(Reading.pending.to_json)
-      expect(JSON.parse(response.body).any? {|r| r['id'] == @r2.id}).not_to eq(true)
+      expect(json_response).not_to include {|r| r['id'] == @r2.id}
     end
+  end
+
+  private
+
+  def json_response
+    JSON.parse(response.body)
   end
 end
