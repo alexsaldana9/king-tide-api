@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ReadingsController, type: :request do
+RSpec.describe ReadingsController, type: :controller do
   before do
     @r1 = create(:reading)
     @r2 = create(:reading)
@@ -8,7 +8,9 @@ RSpec.describe ReadingsController, type: :request do
 
   describe 'get' do
     it 'returns the reading details' do
-      get "/readings/#{@r1.id}"
+      get :get, params: {
+          id: @r1.id
+      }
 
       expect(response.status).to eq(200)
 
@@ -16,13 +18,17 @@ RSpec.describe ReadingsController, type: :request do
     end
 
     it 'returns client error when reading id is invalid' do
-      get '/readings/invalid_reading'
+      get :get, params: {
+          id: 'invalid_reading'
+      }
 
       expect(response.status).to eq(400)
     end
 
     it 'returns not found when reading id does not exist' do
-      get '/readings/-1'
+      get :get, params: {
+          id: -1
+      }
 
       expect(response.status).to eq(404)
     end
@@ -30,7 +36,9 @@ RSpec.describe ReadingsController, type: :request do
     it 'returns not found when reading is deleted' do
       @r1.destroy
 
-      get "/readings/#{@r1.id}"
+      get :get, params: {
+        id: @r1.id
+      }
 
       expect(response.status).to eq(404)
     end
@@ -38,7 +46,7 @@ RSpec.describe ReadingsController, type: :request do
 
   describe 'all' do
     it 'reads all readings' do
-      get '/readings/all'
+      get :all
 
       expect(response.status).to eq(200)
 
@@ -48,7 +56,7 @@ RSpec.describe ReadingsController, type: :request do
     it 'reads all readings excludes deleted readings' do
       @r1.destroy
 
-      get '/readings/all'
+      get :all
 
       expect(response.status).to eq(200)
 
@@ -61,7 +69,7 @@ RSpec.describe ReadingsController, type: :request do
     it 'reads approved readings' do
       @r1.approve!
 
-      get '/readings/approved'
+      get :approved
 
       expect(response.status).to eq(200)
       expect(json_response).to eq(JSON.parse([@r1].each.to_json))
@@ -72,7 +80,7 @@ RSpec.describe ReadingsController, type: :request do
       @r2.approve!
       @r2.destroy
 
-      get '/readings/approved'
+      get :approved
 
       expect(response.status).to eq(200)
       expect(json_response).to eq(JSON.parse([@r1].each.to_json))
@@ -83,7 +91,7 @@ RSpec.describe ReadingsController, type: :request do
     it 'reads pending readings' do
       @r1.approve!
 
-      get '/readings/pending'
+      get :pending
 
       expect(response.status).to eq(200)
       expect(response.body).to eq(Reading.pending.to_json)
@@ -93,7 +101,7 @@ RSpec.describe ReadingsController, type: :request do
     it 'pending readings do not show deleted' do
       @r2.destroy
 
-      get '/readings/pending'
+      get :pending
 
       expect(response.status).to eq(200)
       expect(response.body).to eq(Reading.pending.to_json)
