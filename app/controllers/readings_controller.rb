@@ -5,7 +5,10 @@ class ReadingsController < ApplicationController
       return input_error(:id)
     end
 
-    reading = Reading.find_by_id(params[:id])
+    id = params[:id]
+    reading = cache_action "ReadingsController.get.#{id}" do
+      Reading.find_by_id(id)
+    end
 
     if not reading
       return not_found
@@ -15,15 +18,24 @@ class ReadingsController < ApplicationController
   end
 
   def all
-    render :json => Reading.all
+    result = cache_action 'ReadingsController.all' do
+      Reading.all
+    end
+    render :json => result
   end
 
   def approved
-    render :json => Reading.approved
+    result = cache_action 'ReadingsController.approved' do
+      Reading.approved
+    end
+    render :json => result
   end
 
   def pending
-    render :json => Reading.pending
+    result = cache_action 'ReadingsController.pending' do
+      Reading.pending
+    end
+    render :json => result
   end
 
   private

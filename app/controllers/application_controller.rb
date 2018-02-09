@@ -45,4 +45,10 @@ class ApplicationController < ActionController::API
     end
     params[param_name].empty? == false
   end
+
+  def cache_action(key, expiration=15.seconds)
+    Rails.cache.fetch(key, expires_in: expiration) do
+      yield
+    end
+  end
 end
