@@ -20,7 +20,8 @@ class SecretKey < ApplicationRecord
 
   def self.read_all_keys
     Rails.cache.fetch('SecretKey.AllKeys', expires_in: 1.minute) do
-      SecretKey.distinct.pluck(:key)
+      array = SecretKey.distinct.pluck(:key).to_a
+      Hash[array.collect { |item| [item, ""] } ]
     end
   end
 end
