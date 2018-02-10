@@ -91,11 +91,12 @@
     <orderEntry type="library" scope="PROVIDED" name="formatador (v0.2.5, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v0.4.1, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="http-cookie (v1.0.3, RVM: ruby-2.5.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="i18n (v0.9.1, RVM: ruby-2.5.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="i18n (v0.9.4, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="inflecto (v0.0.2, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ipaddress (v0.8.3, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="jmespath (v1.3.1, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="json (v2.1.0, RVM: ruby-2.5.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="json_spec (v1.1.5, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="listen (v3.1.5, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="loofah (v2.1.1, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mail (v2.7.0, RVM: ruby-2.5.0) [gem]" level="application" />
@@ -105,12 +106,12 @@
     <orderEntry type="library" scope="PROVIDED" name="mimemagic (v0.3.2, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_mime (v0.1.4, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_portile2 (v2.3.0, RVM: ruby-2.5.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="minitest (v5.11.1, RVM: ruby-2.5.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="minitest (v5.11.3, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.13.1, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="netrc (v0.11.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="nio4r (v2.1.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.8.1, RVM: ruby-2.5.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="paperclip (v5.1.0, RVM: ruby-2.5.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="paperclip (v5.2.1, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="paranoia (v2.4.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pg (v0.21.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="puma (v3.10.0, RVM: ruby-2.5.0) [gem]" level="application" />
@@ -126,6 +127,7 @@
     <orderEntry type="library" scope="PROVIDED" name="rbovirt (v0.1.5, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rbvmomi (v1.11.6, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rest-client (v2.0.2, RVM: ruby-2.5.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec (v3.7.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-core (v3.7.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v3.7.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-mocks (v3.7.0, RVM: ruby-2.5.0) [gem]" level="application" />
@@ -140,7 +142,7 @@
     <orderEntry type="library" scope="PROVIDED" name="thor (v0.20.0, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thread_safe (v0.3.6, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="trollop (v2.1.2, RVM: ruby-2.5.0) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.4, RVM: ruby-2.5.0) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.5, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unf (v0.1.4, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unf_ext (v0.0.7.5, RVM: ruby-2.5.0) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-driver (v0.6.5, RVM: ruby-2.5.0) [gem]" level="application" />

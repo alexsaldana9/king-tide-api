@@ -36,6 +36,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails'
   gem 'factory_bot_rails', '~> 4.8', '>= 4.8.2'
+  gem 'json_spec', '~> 1.1', '>= 1.1.4'
 end
 
 group :development do
