@@ -17,6 +17,24 @@ RSpec.describe ReadingsController, type: :controller do
       expect(response.body).to eq(@r1.to_json)
     end
 
+    it 'returns the reading details when it has photos' do
+      ph1 = nil
+      ph2 = nil
+
+      expect {
+        ph1 = create(:photo, reading: @r1)
+        ph2 = create(:photo, reading: @r1)
+      }.to change { Photo.count }.by(2)
+
+      get :get, params: {
+          id: @r1.id
+      }
+
+      expect(response.status).to eq(200)
+
+      expect(response.body).to eq(@r1.to_json)
+    end
+
     it 'returns client error when reading id is invalid' do
       get :get, params: {
           id: 'invalid_reading'
