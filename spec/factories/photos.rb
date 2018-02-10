@@ -2,7 +2,6 @@ require 'test_utils'
 include TestUtils
 
 FactoryBot.define do
-
   factory :photo do
     sequence :category do |n|
       (n % 4) + 1
