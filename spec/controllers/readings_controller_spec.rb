@@ -90,7 +90,7 @@ RSpec.describe ReadingsController, type: :controller do
       get :approved
 
       expect(response.status).to eq(200)
-      expect(json_response).to eq(JSON.parse([@r1].each.to_json))
+      expect(response.body).to be_json_eql([@r1].to_json)
     end
 
     it 'approved readings do not show deleted' do
@@ -101,7 +101,7 @@ RSpec.describe ReadingsController, type: :controller do
       get :approved
 
       expect(response.status).to eq(200)
-      expect(json_response).to eq(JSON.parse([@r1].each.to_json))
+      expect(response.body).to be_json_eql([@r1].to_json)
     end
   end
 
@@ -113,7 +113,7 @@ RSpec.describe ReadingsController, type: :controller do
 
       expect(response.status).to eq(200)
       expect(response.body).to eq(Reading.pending.to_json)
-      expect(json_response).not_to include {|r| r['id'] == @r1.id}
+      expect(response.body.to_json).not_to include {|r| r['id'] == @r1.id}
     end
 
     it 'pending readings do not show deleted' do
@@ -123,13 +123,7 @@ RSpec.describe ReadingsController, type: :controller do
 
       expect(response.status).to eq(200)
       expect(response.body).to eq(Reading.pending.to_json)
-      expect(json_response).not_to include {|r| r['id'] == @r2.id}
+      expect(response.body.to_json).not_to include {|r| r['id'] == @r2.id}
     end
-  end
-
-  private
-
-  def json_response
-    JSON.parse(response.body)
   end
 end
