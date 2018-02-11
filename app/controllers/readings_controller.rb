@@ -14,14 +14,14 @@ class ReadingsController < ApplicationController
       return not_found
     end
 
-    render locals: {reading: reading}
+    render partial: 'item', locals: {reading: reading}
   end
 
   def all
     readings = cache_action 'ReadingsController.all' do
       Reading.includes(:photos).all
     end
-    render locals: {readings: readings}
+    render :collection, locals: {readings: readings}
   end
 
   def approved
