@@ -159,15 +159,9 @@ RSpec.describe Secure::PhotosController, type: :controller do
 
           expect(response.status).to eq(200)
         end
+
+        expect(@r1.reload.photos.pluck(:image_file_name)).to eq(seeded_filenames)
       }.to change { Photo.count }.by(seeded_filenames.count)
-
-      photo_urls = @r1.reload.photos.map(&:image).map(&:url)
-      expect(photo_urls.count).to eq(seeded_filenames.count)
-
-      all_photos_created = seeded_filenames.all? do |f|
-        photo_urls.any? {|u| u.include? f }
-      end
-      expect(all_photos_created).to eq(true)
     end
 
     it 'uploads a photo with a float category' do

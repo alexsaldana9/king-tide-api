@@ -37,8 +37,8 @@ RSpec.describe 'Factory', type: :helper do
       expect(@r1.photos.count).to eq(2)
       expect(@r2.photos.count).to eq(2)
 
-      expect(@r1.photos.map(&:image).map(&:url).uniq.count).to eq(2)
-      expect(@r2.photos.map(&:image).map(&:url).uniq.count).to eq(2)
+      expect(@r1.photos.pluck(:image_file_name).uniq.count).to eq(2)
+      expect(@r2.photos.pluck(:image_file_name).uniq.count).to eq(2)
 
       expect((@r1.photos.map(&:category) + @r2.photos.map(&:category)).uniq.count).to eq(4)
     end
