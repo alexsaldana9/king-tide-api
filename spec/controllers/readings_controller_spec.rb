@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ReadingsController, type: :controller do
+  render_views
+
   before do
     @r1 = create(:reading)
     @r2 = create(:reading)
@@ -14,10 +16,10 @@ RSpec.describe ReadingsController, type: :controller do
 
       expect(response.status).to eq(200)
 
-      expect(response.body).to eq(@r1.to_json)
+      expect(response.body).to be_json_eql(@r1.to_json).excluding('deleted_at', 'photos')
     end
 
-    xit 'returns the reading details when it has photos' do
+    it 'returns the reading details when it has photos' do
       ph1 = nil
       ph2 = nil
 
@@ -37,8 +39,8 @@ RSpec.describe ReadingsController, type: :controller do
         "latitude": #{@r1.latitude || 'null'},
         "longitude": #{@r1.longitude || 'null'},
         "photos": [
-          {"id", #{ph1.id}, "category": "#{ph1.category}", "url": "#{ph1.image.url}"},
-          {"id", #{ph2.id}, "category": "#{ph2.category}", "url": "#{ph2.image.url}"}
+          {"id": #{ph1.id}, "category": #{ph1.category}, "url": "#{ph1.image.url}"},
+          {"id": #{ph2.id}, "category": #{ph2.category}, "url": "#{ph2.image.url}"}
         ]
       })
 
@@ -48,8 +50,7 @@ RSpec.describe ReadingsController, type: :controller do
 
       expect(response.status).to eq(200)
 
-      expect(response.body).to eq(@r1.to_json)
-      expect(response.body).to be_json_eql(expected_result).excluding('created_at', 'updated_at', 'deleted_at')
+      expect(response.body).to be_json_eql(expected_result).excluding('deleted_at')
     end
 
     it 'returns client error when reading id is invalid' do

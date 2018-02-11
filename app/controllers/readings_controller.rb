@@ -7,14 +7,14 @@ class ReadingsController < ApplicationController
 
     id = params[:id]
     reading = cache_action "ReadingsController.get.#{id}" do
-      Reading.find_by_id(id)
+      Reading.includes(:photos).find_by_id(id)
     end
 
     if not reading
       return not_found
     end
 
-    render :json => reading
+    render 'get.json', locals: {reading: reading}
   end
 
   def all
