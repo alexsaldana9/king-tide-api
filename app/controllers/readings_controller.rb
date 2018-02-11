@@ -18,10 +18,10 @@ class ReadingsController < ApplicationController
   end
 
   def all
-    result = cache_action 'ReadingsController.all' do
-      Reading.all
+    readings = cache_action 'ReadingsController.all' do
+      Reading.includes(:photos).all
     end
-    render :json => result
+    render locals: {readings: readings}
   end
 
   def approved

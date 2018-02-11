@@ -86,7 +86,7 @@ RSpec.describe ReadingsController, type: :controller do
 
       expect(response.status).to eq(200)
 
-      expect(response.body).to eq(Reading.all.to_json)
+      expect(response.body).to be_json_eql(Reading.all.to_json).excluding('deleted_at', 'photos')
     end
 
     it 'reads all readings excludes deleted readings' do
@@ -97,7 +97,7 @@ RSpec.describe ReadingsController, type: :controller do
       expect(response.status).to eq(200)
 
       expect(Reading.count).to eq(Reading.with_deleted.count - 1)
-      expect(response.body).to eq(Reading.all.to_json)
+      expect(response.body).to be_json_eql(Reading.all.to_json).excluding('deleted_at', 'photos')
     end
   end
 
