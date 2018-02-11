@@ -108,7 +108,7 @@ RSpec.describe ReadingsController, type: :controller do
       get :approved
 
       expect(response.status).to eq(200)
-      expect(response.body).to be_json_eql([@r1].to_json)
+      expect(response.body).to be_json_eql([@r1].to_json).excluding('deleted_at', 'photos')
     end
 
     it 'approved readings do not show deleted' do
@@ -119,7 +119,7 @@ RSpec.describe ReadingsController, type: :controller do
       get :approved
 
       expect(response.status).to eq(200)
-      expect(response.body).to be_json_eql([@r1].to_json)
+      expect(response.body).to be_json_eql([@r1].to_json).excluding('deleted_at', 'photos')
     end
   end
 

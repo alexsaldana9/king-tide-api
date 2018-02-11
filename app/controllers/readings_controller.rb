@@ -25,10 +25,10 @@ class ReadingsController < ApplicationController
   end
 
   def approved
-    result = cache_action 'ReadingsController.approved' do
-      Reading.approved
+    readings = cache_action 'ReadingsController.approved' do
+      Reading.includes(:photos).approved
     end
-    render :json => result
+    render :collection, locals: {readings: readings}
   end
 
   def pending
