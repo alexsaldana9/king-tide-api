@@ -32,10 +32,10 @@ class ReadingsController < ApplicationController
   end
 
   def pending
-    result = cache_action 'ReadingsController.pending' do
-      Reading.pending
+    readings = cache_action 'ReadingsController.pending' do
+      Reading.includes(:photos).pending
     end
-    render :json => result
+    render :collection, locals: {readings: readings}
   end
 
   private

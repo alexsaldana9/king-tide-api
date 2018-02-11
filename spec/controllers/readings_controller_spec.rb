@@ -130,7 +130,7 @@ RSpec.describe ReadingsController, type: :controller do
       get :pending
 
       expect(response.status).to eq(200)
-      expect(response.body).to eq(Reading.pending.to_json)
+      expect(response.body).to be_json_eql(Reading.pending.to_json).excluding('deleted_at', 'photos')
       expect(response.body.to_json).not_to include {|r| r['id'] == @r1.id}
     end
 
@@ -140,7 +140,7 @@ RSpec.describe ReadingsController, type: :controller do
       get :pending
 
       expect(response.status).to eq(200)
-      expect(response.body).to eq(Reading.pending.to_json)
+      expect(response.body).to be_json_eql(Reading.pending.to_json).excluding('deleted_at', 'photos')
       expect(response.body.to_json).not_to include {|r| r['id'] == @r2.id}
     end
   end
