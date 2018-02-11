@@ -14,7 +14,7 @@ class ReadingsController < ApplicationController
       return not_found
     end
 
-    render 'get.json', locals: {reading: reading}
+    render locals: {reading: reading}
   end
 
   def all
