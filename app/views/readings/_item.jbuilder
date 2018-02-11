@@ -13,4 +13,6 @@ json.photos reading.photos do |photo|
   json.id photo.id
   json.category photo.category
   json.url photo.image.url
+  json.url_thumb photo.image.url(:thumb)
+  json.url_medium photo.image.url(:medium)
 end

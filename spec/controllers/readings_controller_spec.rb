@@ -39,8 +39,20 @@ RSpec.describe ReadingsController, type: :controller do
         "latitude": #{@r1.latitude || 'null'},
         "longitude": #{@r1.longitude || 'null'},
         "photos": [
-          {"id": #{ph1.id}, "category": #{ph1.category}, "url": "#{ph1.image.url}"},
-          {"id": #{ph2.id}, "category": #{ph2.category}, "url": "#{ph2.image.url}"}
+          {
+            "id": #{ph1.id},
+            "category": #{ph1.category},
+            "url": "#{ph1.image.url}",
+            "url_thumb": "#{ph1.image.url(:thumb)}",
+            "url_medium": "#{ph1.image.url(:medium)}"
+          },
+          {
+            "id": #{ph2.id},
+            "category": #{ph2.category},
+            "url": "#{ph2.image.url}",
+            "url_thumb": "#{ph2.image.url(:thumb)}",
+            "url_medium": "#{ph2.image.url(:medium)}"
+          }
         ]
       })
 
