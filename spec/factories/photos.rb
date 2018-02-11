@@ -1,6 +1,3 @@
-require 'test_utils'
-include TestUtils
-
 FactoryBot.define do
   factory :photo do
     sequence :category do |n|
@@ -8,7 +5,7 @@ FactoryBot.define do
     end
 
     sequence :image do |n|
-      test_image("test_image_#{(n % 2) + 1}.jpg")
+      TestUtils.test_image("test_image_#{(n % 2) + 1}.jpg")
     end
   end
 end
