@@ -18,30 +18,28 @@ class ReadingsController < ApplicationController
   end
 
   def all
-    readings = cache_action 'ReadingsController.all' do
-      Reading.includes(:photos).all
-    end
-    render :collection, locals: {readings: readings}
+    render_reading_collection :all
   end
 
   def approved
-    readings = cache_action 'ReadingsController.approved' do
-      Reading.includes(:photos).approved
-    end
-    render :collection, locals: {readings: readings}
+    render_reading_collection :approved
   end
 
   def pending
-    readings = cache_action 'ReadingsController.pending' do
-      Reading.includes(:photos).pending
-    end
-    render :collection, locals: {readings: readings}
+    render_reading_collection :pending
   end
 
   private
 
   def reading_params
     params.permit(:id)
+  end
+
+  def render_reading_collection(name)
+    readings = cache_action "ReadingsController.collection.#{name}" do
+      Reading.includes(:photos).send(name)
+    end
+    render :collection, locals: {readings: readings}
   end
 
 end
