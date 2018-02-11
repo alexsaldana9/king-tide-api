@@ -18,6 +18,18 @@ RSpec.describe ReadingsController, type: :controller do
     end
 
     it 'returns the reading details when it has photos' do
+      expected_result = %({
+        "id":#{@r1.id},
+        "depth":#{@r1.depth},
+        "units_depth":"#{@r1.units_depth}",
+        "salinity":#{@r1.salinity},
+        "units_salinity":"#{@r1.units_salinity}",
+        "description":"#{@r1.description || 'null'}",
+        "approved":#{@r1.approved},
+        "latitude":#{@r1.latitude || 'null'},
+        "longitude":#{@r1.longitude || 'null'}
+      })
+
       ph1 = nil
       ph2 = nil
 
@@ -33,6 +45,7 @@ RSpec.describe ReadingsController, type: :controller do
       expect(response.status).to eq(200)
 
       expect(response.body).to eq(@r1.to_json)
+      expect(response.body).to be_json_eql(expected_result).excluding('created_at', 'updated_at', 'deleted_at')
     end
 
     it 'returns client error when reading id is invalid' do
